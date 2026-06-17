@@ -1,0 +1,47 @@
+{
+  "name": "universal_turing_machine",
+  "alphabet": [ "1", "+", "_", "A", "B", "C", "H", "L", "R", "#", "*", "[", "]", "x", "y", "n", "." ],
+  "blank": ".",
+  "states": [ "find_head", "read_virtual_char", "go_to_state", "match_transition", "update_state", "update_tape", "move_head_left", "move_head_right", "HALT" ],
+  "initial": "find_head",
+  "finals": [ "HALT" ],
+  "transitions": {
+    "find_head": [
+      { "read": "1", "to_state": "find_head", "write": "1", "action": "RIGHT" },
+      { "read": "+", "to_state": "find_head", "write": "+", "action": "RIGHT" },
+      { "read": "_", "to_state": "find_head", "write": "_", "action": "RIGHT" },
+      { "read": "#", "to_state": "find_head", "write": "#", "action": "RIGHT" },
+      { "read": "A", "to_state": "find_head", "write": "A", "action": "RIGHT" },
+      { "read": "B", "to_state": "find_head", "write": "B", "action": "RIGHT" },
+      { "read": "C", "to_state": "find_head", "write": "C", "action": "RIGHT" },
+      { "read": "H", "to_state": "HALT",        "write": "H", "action": "LEFT"  },
+      { "read": "*", "to_state": "read_virtual_char", "write": "*", "action": "RIGHT" }
+    ],
+    "read_virtual_char": [
+      { "read": "1", "to_state": "go_to_state", "write": "[", "action": "LEFT" },
+      { "read": "+", "to_state": "go_to_state", "write": "]", "action": "LEFT" },
+      { "read": "_", "to_state": "go_to_state", "write": "x", "action": "LEFT" }
+    ],
+    "go_to_state": [
+      { "read": "1", "to_state": "go_to_state", "write": "1", "action": "LEFT" },
+      { "read": "+", "to_state": "go_to_state", "write": "+", "action": "LEFT" },
+      { "read": "_", "to_state": "go_to_state", "write": "_", "action": "LEFT" },
+      { "read": "*", "to_state": "go_to_state", "write": "*", "action": "LEFT" },
+      { "read": "#", "to_state": "match_transition", "write": "#", "action": "LEFT" }
+    ],
+    "match_transition": [
+      { "read": "A", "to_state": "update_state", "write": "A", "action": "RIGHT" },
+      { "read": "B", "to_state": "update_state", "write": "B", "action": "RIGHT" },
+      { "read": "C", "to_state": "update_state", "write": "C", "action": "RIGHT" }
+    ],
+    "update_state": [
+      { "read": "#", "to_state": "update_tape", "write": "#", "action": "RIGHT" }
+    ],
+    "update_tape": [
+      { "read": "*", "to_state": "update_tape", "write": "*", "action": "RIGHT" },
+      { "read": "[", "to_state": "find_head",    "write": "1", "action": "LEFT" },
+      { "read": "]", "to_state": "find_head",    "write": "+", "action": "LEFT" },
+      { "read": "x", "to_state": "find_head",    "write": "_", "action": "LEFT" }
+    ]
+  }
+}
