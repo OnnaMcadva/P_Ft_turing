@@ -1,6 +1,6 @@
 # ft_turing
 
-An elegant, purely functional single-tape Turing Machine simulator written in OCaml. This project simulates a Turing Machine based on a JSON configuration file and evaluates its execution, including time and space complexity analysis (Bonus Part).
+An elegant, purely functional single-tape Turing Machine simulator written in OCaml. This project simulates a Turing Machine based on a JSON configuration file and evaluates its execution, featuring a built-in **Time and Space Complexity Analyzer (Bonus Part)**.
 
 ---
 
@@ -20,8 +20,7 @@ To compile and run this project, you need **OPAM** (OCaml Package Manager) insta
 
 ### Installing OPAM (if not installed)
 
-- **macOS (via Homebrew):**
-  ```bash
+- **macOS (via Homebrew):**bash
   brew install opam
   ```
 - **Linux (Debian/Ubuntu):**
@@ -69,11 +68,31 @@ This will produce a beautiful ASCII-art confirmation and create the executable `
 
 ---
 
+## Bonus Part: Complexity Analysis
+
+The **Bonus Part** (Time and Space complexity analysis) is fully implemented and integrated directly into the simulator. You do not need any special flags to run it — **it executes automatically at the end of every successful simulation run.**
+
+### How it works:
+1. **Time Complexity (Steps):** The simulator tracks the exact number of transitions executed from the initial state to the final state.
+2. **Space Complexity (Memory):** The simulator tracks the head's position relative to the starting point (0). By recording the minimum and maximum coordinates visited by the head, it calculates the exact number of unique tape cells used: $\text{Space} = \text{Max Position} - \text{Min Position} + 1$.
+
+### Example Bonus Output:
+```text
+================================================================================
+  ALGORITHM COMPLEXITY (BONUS)
+================================================================================
+  Time Complexity (Steps executed) : 18
+  Space Complexity (Tape cells used): 8
+================================================================================
+```
+
+---
+
 ## The 5 Included Machines
 
 The `machines/` directory contains 5 pre-configured Turing Machines:
 
-1. **Unary Addition** (`machines/unary_add.json`): Computes the sum of two unary numbers separated by `+`. (e.g., `111+11` becomes `11111`).
+1. **Unary Addition** (`machines/unary_add.json`): Computes the sum of two unary numbers separated by `+`.
 2. **Palindrome Detector** (`machines/palindrome.json`): Decides if the input string is a palindrome. Writes `y` or `n` at the end of the tape.
 3. **$0^n1^n$ Language** (`machines/0n1n.json`): Decides if the input consists of $n$ zeros followed by exactly $n$ ones. Writes `y` or `n` at the end.
 4. **$0^{2^n}$ Language** (`machines/02n.json`): Decides if the length of the input of zeros is a power of 2. Writes `y` or `n` at the end.
@@ -81,67 +100,166 @@ The `machines/` directory contains 5 pre-configured Turing Machines:
 
 ---
 
-## Test Suite (How to Run)
+## Comprehensive Evaluation Test Suite
 
-Here is a comprehensive list of test cases you can run to verify the simulator and the machines.
+Use these test cases during peer evaluation to thoroughly test the simulator and the machines.
 
-### 1. Unary Addition
-Computes $3 + 2 = 5$.
-```bash
-./ft_turing machines/unary_add.json "111+11"
-```
-*Expected Output:* The tape ends with `11111` under the head, followed by the complexity report.
+### 1. Unary Addition (`unary_add.json`)
+Computes $A + B = C$ in unary representation (where `111` is 3, `11` is 2).
 
-### 2. Palindrome Detector
-- **Valid Palindrome:**
-  ```bash
-  ./ft_turing machines/palindrome.json "abbba"
-  ```
-  *Expected Output:* Tape ends with `abbbay` (accepted).
-  
-- **Invalid Palindrome:**
-  ```bash
-  ./ft_turing machines/palindrome.json "abbab"
-  ```
-  *Expected Output:* Tape ends with `abbabn` (rejected).
+*   **Test 1.1: Standard Addition ($3 + 2 = 5$)**
+    ```bash
+    ./ft_turing machines/unary_add.json "111+11"
+    ```
+    *Expected Result:* Tape ends with `11111` (5).
+    *Complexity:* ~10 steps, 7 cells.
 
-### 3. $0^n1^n$ Language
-- **Valid String ($0^3 1^3$):**
-  ```bash
-  ./ft_turing machines/0n1n.json "000111"
-  ```
-  *Expected Output:* Tape ends with `000111y` (accepted).
+*   **Test 1.2: Addition with 1 ($1 + 1 = 2$)**
+    ```bash
+    ./ft_turing machines/unary_add.json "1+1"
+    ```
+    *Expected Result:* Tape ends with `11` (2).
 
-- **Invalid String (unbalanced):**
-  ```bash
-  ./ft_turing machines/0n1n.json "00011"
-  ```
-  *Expected Output:* Tape ends with `00011n` (rejected).
+*   **Test 1.3: Large Addition ($10 + 10 = 20$)**
+    ```bash
+    ./ft_turing machines/unary_add.json "1111111111+1111111111"
+    ```
+    *Expected Result:* Tape ends with 20 ones. Observe the linear growth in Time Complexity!
 
-### 4. $0^{2^n}$ Language
-- **Valid String (length 4 = $2^2$):**
-  ```bash
-  ./ft_turing machines/02n.json "0000"
-  ```
-  *Expected Output:* Tape ends with `0000y` (accepted).
+---
 
-- **Invalid String (length 3 $\neq 2^n$):**
-  ```bash
-  ./ft_turing machines/02n.json "000"
-  ```
-  *Expected Output:* Tape ends with `000n` (rejected).
+### 2. Palindrome Detector (`palindrome.json`)
+Checks if the input string reads the same backwards as forwards. Writes `y` (yes) or `n` (no) at the end.
 
-### 5. Error Handling Tests (Guaranteed No Crashes)
-- **Invalid JSON file:**
-  ```bash
-  ./ft_turing machines/unary_add.json "111+11invalid_char"
-  ```
-  *Expected Output:* Clean error message explaining that the input contains characters not present in the machine's alphabet.
+*   **Test 2.1: Odd-length Palindrome (Accepted)**
+    ```bash
+    ./ft_turing machines/palindrome.json "aba"
+    ```
+    *Expected Result:* Tape ends with `abay` (Accepted).
 
-- **Missing file:**
-  ```bash
-  ./ft_turing non_existent.json "111"
-  ```
-  *Expected Output:* Clean error message: `Error parsing machine: File system error...`
-```
+*   **Test 2.2: Even-length Palindrome (Accepted)**
+    ```bash
+    ./ft_turing machines/palindrome.json "baab"
+    ```
+    *Expected Result:* Tape ends with `baaby` (Accepted).
+
+*   **Test 2.3: Single Character Palindrome (Accepted)**
+    ```bash
+    ./ft_turing machines/palindrome.json "a"
+    ```
+    *Expected Result:* Tape ends with `ay` (Accepted).
+
+*   **Test 2.4: Non-palindrome (Rejected)**
+    ```bash
+    ./ft_turing machines/palindrome.json "abc"
+    ```
+    *Expected Result:* Tape ends with `abcn` (Rejected).
+
+---
+
+### 3. $0^n1^n$ Language (`0n1n.json`)
+Checks if the input consists of $n$ zeros followed by exactly $n$ ones. Writes `y` or `n` at the end.
+
+*   **Test 3.1: Balanced String ($0^3 1^3$ - Accepted)**
+    ```bash
+    ./ft_turing machines/0n1n.json "000111"
+    ```
+    *Expected Result:* Tape ends with `000111y` (Accepted).
+
+*   **Test 3.2: Unbalanced - Too many zeros (Rejected)**
+    ```bash
+    ./ft_turing machines/0n1n.json "000011"
+    ```
+    *Expected Result:* Tape ends with `000011n` (Rejected).
+
+*   **Test 3.3: Unbalanced - Too many ones (Rejected)**
+    ```bash
+    ./ft_turing machines/0n1n.json "00111"
+    ```
+    *Expected Result:* Tape ends with `00111n` (Rejected).
+
+*   **Test 3.4: Wrong Order (Rejected)**
+    ```bash
+    ./ft_turing machines/0n1n.json "111000"
+    ```
+    *Expected Result:* Tape ends with `111000n` (Rejected).
+
+---
+
+### 4. $0^{2^n}$ Language (`02n.json`)
+Checks if the number of zeros is a power of 2 ($2^0=1$, $2^1=2$, $2^2=4$, $2^3=8$, etc.). Writes `y` or `n` at the end.
+
+*   **Test 4.1: Power of 2 (Length 4 - Accepted)**
+    ```bash
+    ./ft_turing machines/02n.json "0000"
+    ```
+    *Expected Result:* Tape ends with `0000y` (Accepted).
+
+*   **Test 4.2: Power of 2 (Length 1 - Accepted)**
+    ```bash
+    ./ft_turing machines/02n.json "0"
+    ```
+    *Expected Result:* Tape ends with `0y` (Accepted).
+
+*   **Test 4.3: Power of 2 (Length 8 - Accepted)**
+    ```bash
+    ./ft_turing machines/02n.json "00000000"
+    ```
+    *Expected Result:* Tape ends with `00000000y` (Accepted).
+
+*   **Test 4.4: Non-power of 2 (Length 3 - Rejected)**
+    ```bash
+    ./ft_turing machines/02n.json "000"
+    ```
+    *Expected Result:* Tape ends with `000n` (Rejected).
+
+*   **Test 4.5: Non-power of 2 (Length 6 - Rejected)**
+    ```bash
+    ./ft_turing machines/02n.json "000000"
+    ```
+    *Expected Result:* Tape ends with `000000n` (Rejected).
+
+---
+
+### 5. Robustness & Error Handling Tests (No Crashes)
+
+*   **Test 5.1: Invalid Characters in Input**
+    ```bash
+    ./ft_turing machines/unary_add.json "111+11invalid"
+    ```
+    *Expected Result:* Clean exit with error: `Error validating input: Input error: character 'i' is not in the alphabet.`
+
+*   **Test 5.2: Input contains Blank Character**
+    ```bash
+    ./ft_turing machines/unary_add.json "111+11."
+    ```
+    *Expected Result:* Clean exit with error: `Error validating input: Input error: input string contains the blank character '.'.`
+
+*   **Test 5.3: Missing JSON File**
+    ```bash
+    ./ft_turing machines/does_not_exist.json "111"
+    ```
+    *Expected Result:* Clean exit with error: `Error parsing machine: File system error...`
+
+*   **Test 5.4: Malformed JSON (Syntax Error)**
+    ```bash
+    echo "{" > machines/corrupted.json
+    ./ft_turing machines/corrupted.json "111"
+    rm machines/corrupted.json
+    ```
+    *Expected Result:* Clean exit with error: `Error parsing machine: JSON syntax error...`
+
+*   **Test 5.5: Blocked Machine (No valid transition)**
+    ```bash
+    ./ft_turing machines/unary_add.json "111"
+    ```
+    *Expected Result:* The machine starts, but halts cleanly when blocked: `Simulation halted: Machine blocked in state 'find_plus' reading character '.'.`
+
+---
+
+## License
+
+No license is provided — use and modification for learning purposes only.
+
+---
 
