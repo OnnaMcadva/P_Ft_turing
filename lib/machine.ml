@@ -1,5 +1,3 @@
-(* lib/machine.ml *)
-
 (* 1. Define the direction of the head movement *)
 type action = Left | Right
 
