@@ -23,7 +23,7 @@
 (* OCaml *)
 let x = 5
 let add a b = a + b
-```
+
 ```c
 // C
 const int x = 5;
