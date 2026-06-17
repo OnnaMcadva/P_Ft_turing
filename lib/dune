@@ -1,0 +1,3 @@
+(library
+ (name ft_turing_lib)
+ (libraries yojson))
