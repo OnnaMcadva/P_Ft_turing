@@ -20,7 +20,8 @@ To compile and run this project, you need **OPAM** (OCaml Package Manager) insta
 
 ### Installing OPAM (if not installed)
 
-- **macOS (via Homebrew):**bash
+- **macOS (via Homebrew):**
+  ```bash
   brew install opam
   ```
 - **Linux (Debian/Ubuntu):**
