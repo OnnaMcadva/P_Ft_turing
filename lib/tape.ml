@@ -1,5 +1,3 @@
-(* lib/tape.ml *)
-
 (* Define the Tape type *)
 type t = {
   left : char list;
