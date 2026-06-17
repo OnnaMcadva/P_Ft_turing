@@ -1,77 +1,146 @@
-# P_Ft_turing
-The origin of programming
+# ft_turing
 
-
-# Тезисный разбор проекта "Ft_turing"
-
-## 1. Общие и технические правила (Generic Rules)
-*   **Язык программирования:** Любой функциональный язык (рекомендуется **OCaml**). Если выберете другой, вы обязаны строго соблюдать функциональную парадигму.
-*   **Стиль кода:** Строго функциональный. Избегайте императивного стиля. Использование итераторов (`map`, `fold`, `filter`, `iter`), анонимных функций и констант — обязательно.
-*   **Запрет на `;;`:** В коде OCaml ни в одном файле не должно быть токена `;;` (он нужен только для интерактивного интерпретатора REPL).
-*   **Makefile (обязательно для OCaml):**
-    *   Должен компилировать код с помощью `ocamlopt` и `ocamlc`.
-    *   **Важно:** Makefile должен автоматически определять отсутствие необходимых библиотек/инструментов и устанавливать их через пакетный менеджер **OPAM**. Проверяющий не должен ничего устанавливать вручную перед защитой.
-*   **Библиотеки:** Разрешено использовать стандартные библиотеки и популярные сторонние (например, `Core`, `Batteries`, библиотеки для парсинга JSON), но запрещено использовать библиотеки, которые делают всю работу за вас.
+An elegant, purely functional single-tape Turing Machine simulator written in OCaml. This project simulates a Turing Machine based on a JSON configuration file and evaluates its execution, including time and space complexity analysis (Bonus Part).
 
 ---
 
-## 2. Требования к симулятору (Mandatory Part — V.1)
-Вы должны написать программу, которая симулирует работу машины Тьюринга с одной головкой и одной бесконечной лентой.
+## Features
 
-### Интерфейс командной строки (CLI)
-Программа должна запускаться из терминала. Обязательна поддержка флага помощи:
+- **Purely Functional:** Built using the functional paradigm in OCaml. No side effects, no mutable states, and no imperative loops.
+- **Infinite Tape:** Implemented using the **Zipper** data structure, allowing $O(1)$ head movement and tape expansion in both directions.
+- **Robust Validation:** Strictly validates both the JSON machine description and the input string before execution. The simulator is guaranteed never to crash.
+- **Interactive Visualization:** Displays the state of the tape, the head position, and the transition being executed at each step.
+- **Bonus Part Included:** Calculates and displays **Time Complexity** (total steps) and **Space Complexity** (total unique tape cells used).
+
+---
+
+## Prerequisites
+
+To compile and run this project, you need **OPAM** (OCaml Package Manager) installed on your system.
+
+### Installing OPAM (if not installed)
+
+- **macOS (via Homebrew):**bash
+  brew install opam
+  ```
+- **Linux (Debian/Ubuntu):**
+  ```bash
+  sudo apt-get install opam
+  ```
+
+Initialize OPAM:
 ```bash
-$ ./ft_turing --help # или -h
+opam init
+eval $(opam env)
 ```
-Вывод должен содержать справку (usage):
-```text
-usage: ft_turing [-h] jsonfile input
-
-positional arguments:
-  jsonfile    json description of the machine
-  input       input of the machine
-```
-
-### Обработка ошибок и надежность
-*   Программа должна валидировать JSON-файл машины и входную строку (`input`).
-*   Любые некорректные или поврежденные файлы/вводы должны отклоняться с понятным сообщением об ошибке.
-*   **Программа ни при каких обстоятельствах не должна аварийно завершаться (крашиться).**
-*   Если машина зависает (бесконечный цикл) или блокируется (нет подходящего перехода), программа должна обнаружить это и сообщить пользователю.
-
-### Формат JSON-описания машины
-JSON должен содержать следующие поля:
-1.  `name`: Имя машины.
-2.  `alphabet`: Объединенный алфавит (входной + рабочий), включая символ пустоты (blank). Каждый символ — строка длиной ровно 1.
-3.  `blank`: Символ пустоты. Должен быть в алфавите, но **не** должен присутствовать во входной строке (`input`).
-4.  `states`: Полный список состояний машины.
-5.  `initial`: Начальное состояние (должно быть в списке `states`).
-6.  `finals`: Список финальных состояний (подмножество `states`).
-7.  `transitions`: Словарь переходов, сгруппированный по состояниям. Каждый переход содержит:
-    *   `read`: Символ на ленте под головкой.
-    *   `to_state`: Новое состояние.
-    *   `write`: Символ, который нужно записать на ленту.
-    *   `action`: Движение головки (`LEFT` или `RIGHT`).
-
-### Вывод работы программы
-При запуске программа должна:
-1.  Вывести общую информацию о машине (имя, алфавит, состояния, переходы).
-2.  На каждом шаге (транзакции) визуализировать состояние ленты и положение головки (например, с помощью скобок `< >` вокруг текущего символа), а также показывать выполняемый переход.
-3.  *Допускается логирование состояния ленты в файл вместо терминала для лучшей читаемости.*
 
 ---
 
-## 3. Требования к 5 машинам Тьюринга (Mandatory Part — V.2)
-Вы должны написать **5 JSON-файлов** с описанием машин Тьюринга для решения следующих задач:
+## Compilation
 
-1.  **Унарное сложение (Unary addition):** Машина, складывающая два числа в унарной системе счисления (например, `111+11` должно превратиться в `11111`).
-2.  **Палиндром (Palindrome):** Машина определяет, является ли входная строка палиндромом. Перед остановкой она должна записать результат (`y` или `n`) справа от самого правого символа на ленте.
-3.  **Язык $0^n1^n$:** Проверяет, состоит ли слово из $n$ нулей, за которыми следует ровно столько же единиц (например, `000111`). Результат (`y`/`n`) пишется справа от крайнего символа перед остановкой.
-4.  **Язык $0^{2^n}$:** Проверяет, является ли длина строки из нулей степенью двойки (например, длина 2, 4, 8 — верно, а 3, 5 — нет). Результат (`y`/`n`) пишется справа перед остановкой.
-5.  **Универсальная машина Тьюринга (УМТ / UTM):** Машина, способная запустить первую машину из этого списка (унарное сложение). Алфавит, состояния, переходы и входные данные первой машины должны быть закодированы и поданы на вход этой пятой машине.
+The project uses a smart `Makefile` that automatically detects and installs all required dependencies (`dune` and `yojson`) via OPAM.
+
+To compile the project, simply run:
+```bash
+make
+```
+
+This will produce a beautiful ASCII-art confirmation and create the executable `./ft_turing` in the root directory.
+
+### Other Makefile Commands
+
+- `make clean` - Removes temporary build files.
+- `make fclean` - Removes build files and the executable.
+- `make re` - Recompiles the project from scratch.
 
 ---
 
-## 4. Бонусная часть (Bonus Part)
-*   **Суть бонуса:** Модифицировать программу так, чтобы она вычисляла и выводила **сложность алгоритма по времени и по памяти** (Time and Space complexity) для выполненной симуляции.
-*   **Условие оценки:** Бонус оценивается только в том случае, если обязательная (Mandatory) часть выполнена идеально и без ошибок.
+## Usage
+
+```bash
+./ft_turing [-h] jsonfile input
+```
+
+### Arguments:
+- `jsonfile`: Path to the JSON file containing the machine description.
+- `input`: The initial string to be written on the tape.
+- `-h, --help`: Show the help message and exit.
+
+---
+
+## The 5 Included Machines
+
+The `machines/` directory contains 5 pre-configured Turing Machines:
+
+1. **Unary Addition** (`machines/unary_add.json`): Computes the sum of two unary numbers separated by `+`. (e.g., `111+11` becomes `11111`).
+2. **Palindrome Detector** (`machines/palindrome.json`): Decides if the input string is a palindrome. Writes `y` or `n` at the end of the tape.
+3. **$0^n1^n$ Language** (`machines/0n1n.json`): Decides if the input consists of $n$ zeros followed by exactly $n$ ones. Writes `y` or `n` at the end.
+4. **$0^{2^n}$ Language** (`machines/02n.json`): Decides if the length of the input of zeros is a power of 2. Writes `y` or `n` at the end.
+5. **Universal Turing Machine** (`machines/utm.json`): A conceptual machine designed to simulate the Unary Addition machine.
+
+---
+
+## Test Suite (How to Run)
+
+Here is a comprehensive list of test cases you can run to verify the simulator and the machines.
+
+### 1. Unary Addition
+Computes $3 + 2 = 5$.
+```bash
+./ft_turing machines/unary_add.json "111+11"
+```
+*Expected Output:* The tape ends with `11111` under the head, followed by the complexity report.
+
+### 2. Palindrome Detector
+- **Valid Palindrome:**
+  ```bash
+  ./ft_turing machines/palindrome.json "abbba"
+  ```
+  *Expected Output:* Tape ends with `abbbay` (accepted).
+  
+- **Invalid Palindrome:**
+  ```bash
+  ./ft_turing machines/palindrome.json "abbab"
+  ```
+  *Expected Output:* Tape ends with `abbabn` (rejected).
+
+### 3. $0^n1^n$ Language
+- **Valid String ($0^3 1^3$):**
+  ```bash
+  ./ft_turing machines/0n1n.json "000111"
+  ```
+  *Expected Output:* Tape ends with `000111y` (accepted).
+
+- **Invalid String (unbalanced):**
+  ```bash
+  ./ft_turing machines/0n1n.json "00011"
+  ```
+  *Expected Output:* Tape ends with `00011n` (rejected).
+
+### 4. $0^{2^n}$ Language
+- **Valid String (length 4 = $2^2$):**
+  ```bash
+  ./ft_turing machines/02n.json "0000"
+  ```
+  *Expected Output:* Tape ends with `0000y` (accepted).
+
+- **Invalid String (length 3 $\neq 2^n$):**
+  ```bash
+  ./ft_turing machines/02n.json "000"
+  ```
+  *Expected Output:* Tape ends with `000n` (rejected).
+
+### 5. Error Handling Tests (Guaranteed No Crashes)
+- **Invalid JSON file:**
+  ```bash
+  ./ft_turing machines/unary_add.json "111+11invalid_char"
+  ```
+  *Expected Output:* Clean error message explaining that the input contains characters not present in the machine's alphabet.
+
+- **Missing file:**
+  ```bash
+  ./ft_turing non_existent.json "111"
+  ```
+  *Expected Output:* Clean error message: `Error parsing machine: File system error...`
+```
 
