@@ -1,5 +1,3 @@
-(* lib/parser.ml *)
-
 open Yojson.Basic.Util
 
 (* Define the monadic bind operator for Result type to handle errors cleanly *)
