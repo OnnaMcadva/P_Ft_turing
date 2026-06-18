@@ -1,0 +1,7 @@
+_build/
+*.exe
+*.install
+*.merlin
+*.opam-switch/
+*.log
+.env
