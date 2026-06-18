@@ -28,6 +28,14 @@ To compile and run this project, you need **OPAM** (OCaml Package Manager) insta
   ```bash
   sudo apt-get install opam
   ```
+- **FOR 42**
+    ```
+    curl -L https://github.com/ocaml/opam/releases/download/2.5.1/opam-2.5.1-x86_64-linux \
+    -o ~/.local/bin/opam
+
+    chmod +x ~/.local/bin/opam
+    ~/.local/bin/opam --version
+    ```
 
 Initialize OPAM:
 ```bash
