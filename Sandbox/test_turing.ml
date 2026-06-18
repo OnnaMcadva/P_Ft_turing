@@ -1,3 +1,5 @@
+(* https://ocaml.org/play *)
+
 (* 1. МОДУЛЬ ЛЕНТЫ (Tape) *)
 module Tape = struct
   type t = {
