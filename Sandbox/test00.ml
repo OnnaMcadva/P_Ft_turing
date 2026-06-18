@@ -8,8 +8,26 @@ let rec count_length list =
 
 (* Тестируем функцию *)
 let my_list = [10; 20; 30; 40; 50]
-let result = count_length my_list
+let result1 = count_length my_list
 
 (* Выводим результат на экран *)
 let () = 
-  Printf.printf "The list has %d elements!\n" result
+  Printf.printf "The list has %d elements!\n" result1
+
+
+
+let rec count_ones list =
+  match list with
+  | [] -> 0
+  | hd :: tl -> 
+      if hd = '1' then 
+        1 + count_ones tl
+      else 
+        0 + count_ones tl
+
+let my_tape = ['1'; '.'; '1'; '1'; '.'; '1']
+let result2 = count_ones my_tape
+
+let () = 
+  Printf.printf "Found %d ones on the tape!\n" result2
+  
