@@ -325,7 +325,7 @@ The palindrome detector moves back and forth, erasing characters from both ends.
 ## License
 
 No license is provided — use and modification for learning purposes only.
-```
+
 
 
 https://ocaml.org/play
