@@ -44,6 +44,11 @@ eval $(opam env)
 ```
 ```
 opam install dune -y
+eval $(opam env)
+```
+```
+opam install yojson -y
+eval $(opam env)
 ```
 
 ---
