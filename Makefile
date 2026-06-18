@@ -30,10 +30,10 @@ $(NAME):
 	@$(DUNE) build bin/main.exe
 	@cp _build/default/bin/main.exe $(NAME)
 	@echo "$(BOLD)$(GREEN_BR)      _________________________________________________ $(DEF_COLOR)"
-	@echo "$(BOLD)$(GREEN_BR)     /                                                 \\$(DEF_COLOR)"
+	@echo "$(BOLD)$(GREEN_BR)     /                                                 \ \$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |   ___________________________________________     |$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |  |                                           |    |$(DEF_COLOR)"
-	@echo "$(BOLD)$(GREEN_BR)    |  |  $(BLUE_BR)[1] [0] [1] <1> [0] [1] [.] [.]$(GREEN_BR)           |    |$(DEF_COLOR)"
+	@echo "$(BOLD)$(GREEN_BR)    |  |  $(BLUE_BR)[1] [0] [1] <1> [0] [1] [.] [.]$(GREEN_BR)          |    |$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |  |___________________________________________|    |$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |                                                   |$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |   $(YELLOW_BR)ft_turing is ready to simulate!$(GREEN_BR)                 |$(DEF_COLOR)"
