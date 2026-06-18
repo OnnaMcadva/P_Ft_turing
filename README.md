@@ -42,6 +42,9 @@ Initialize OPAM:
 opam init
 eval $(opam env)
 ```
+```
+opam install dune -y
+```
 
 ---
 
