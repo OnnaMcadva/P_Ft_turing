@@ -27,22 +27,30 @@ all: install_deps $(NAME)
 
 $(NAME):
 	@echo "$(BOLD)$(CYAN)Compiling $(NAME)...$(DEF_COLOR)"
+	@echo ""
+	@echo "$(BOLD)$(BLUE_BR)<><><><><><><><><><><><><><><><><><><><><><><><><><>$(DEF_COLOR)"
+	@echo ""
 	@$(DUNE) build bin/main.exe
 	@cp _build/default/bin/main.exe $(NAME)
 	@echo "$(BOLD)$(GREEN_BR)      _________________________________________________ $(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)     /                                                 \ \$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |   ___________________________________________     |$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |  |                                           |    |$(DEF_COLOR)"
-	@echo "$(BOLD)$(GREEN_BR)    |  |  $(BLUE_BR)[1] [0] [1] <1> [0] [1] [.] [.]$(GREEN_BR)          |    |$(DEF_COLOR)"
+	@echo "$(BOLD)$(GREEN_BR)    |  |     $(BLUE_BR)[1] [0] [1] <1> [0] [1] [.] [.]$(GREEN_BR)       |    |$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |  |___________________________________________|    |$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |                                                   |$(DEF_COLOR)"
-	@echo "$(BOLD)$(GREEN_BR)    |   $(YELLOW_BR)ft_turing is ready to simulate!$(GREEN_BR)                 |$(DEF_COLOR)"
+	@echo "$(BOLD)$(GREEN_BR)    |   $(YELLOW_BR)      ft_turing is ready to simulate!$(GREEN_BR)           |       $(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)    |___________________________________________________|$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)           \\___________________________________/$(DEF_COLOR)"
 	@echo "$(BOLD)$(GREEN_BR)                \\_________________________/$(DEF_COLOR)"
 	@echo ""
+	@echo "$(BOLD)$(GREEN)Compilation successful! You can now run './$(NAME)' to start the Turing machine simulator.$(DEF_COLOR)"
+	@echo ""
 
 install_deps:
+	@echo ""
+	@echo "$(BOLD)$(BLUE_BR)<><><><><><><><><><><><><><><><><><><><><><><>$(DEF_COLOR)"
+	@echo ""
 	@echo "$(BOLD)$(YELLOW)Checking dependencies...$(DEF_COLOR)"
 	@if ! command -v opam > /dev/null; then \
 		echo "$(BOLD)$(RED)Error: OPAM is not installed. Please install OPAM first.$(DEF_COLOR)"; \
