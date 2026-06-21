@@ -2,7 +2,10 @@
   "name": "0n1n",
   "alphabet": [ "0", "1", "x", "z", "y", "n", "." ],
   "blank": ".",
-  "states": [ "find_0", "find_1", "check_1", "go_left", "check_only_z", "write_y", "write_n", "HALT" ],
+  "states": [
+    "find_0", "find_1", "check_1", "go_left",
+    "check_only_z", "write_y", "write_n", "HALT"
+  ],
   "initial": "find_0",
   "finals": [ "HALT" ],
   "transitions": {
@@ -15,13 +18,15 @@
     "find_1": [
       { "read": "0", "to_state": "find_1", "write": "0", "action": "RIGHT" },
       { "read": "1", "to_state": "find_1", "write": "1", "action": "RIGHT" },
-      { "read": "z", "to_state": "check_1", "write": "z", "action": "LEFT" },
+      { "read": "z", "to_state": "find_1", "write": "z", "action": "RIGHT" },
       { "read": ".", "to_state": "check_1", "write": ".", "action": "LEFT" }
     ],
     "check_1": [
-      { "read": "1", "to_state": "go_left", "write": "z", "action": "LEFT" },
-      { "read": "0", "to_state": "write_n", "write": "0", "action": "RIGHT" },
-      { "read": "x", "to_state": "write_n", "write": "x", "action": "RIGHT" }
+      { "read": "1", "to_state": "go_left",  "write": "z", "action": "LEFT" },
+      { "read": "z", "to_state": "write_y",  "write": "z", "action": "RIGHT" },
+      { "read": ".", "to_state": "write_n",  "write": ".", "action": "RIGHT" },
+      { "read": "0", "to_state": "write_n",  "write": "0", "action": "RIGHT" },
+      { "read": "x", "to_state": "write_n",  "write": "x", "action": "RIGHT" }
     ],
     "go_left": [
       { "read": "0", "to_state": "go_left", "write": "0", "action": "LEFT" },

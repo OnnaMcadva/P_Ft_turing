@@ -56,7 +56,19 @@ install_deps:
 		echo "$(BOLD)$(RED)Error: OPAM is not installed. Please install OPAM first.$(DEF_COLOR)"; \
 		exit 1; \
 	fi
-	@if ! opam list --installed dune > /dev/null || ! opam list --installed yojson > /dev/null; then \
+	@if ! command -v ocamlopt > /dev/null; then \
+		echo "$(BOLD)$(RED)Error: ocamlopt not found. Please install OCaml via OPAM:$(DEF_COLOR)"; \
+		echo "  opam install ocaml"; \
+		exit 1; \
+	fi
+	@if ! command -v ocamlc > /dev/null; then \
+		echo "$(BOLD)$(RED)Error: ocamlc not found. Please install OCaml via OPAM:$(DEF_COLOR)"; \
+		echo "  opam install ocaml"; \
+		exit 1; \
+	fi
+	@echo "$(BOLD)$(GREEN)OCaml compilers (ocamlopt, ocamlc): OK$(DEF_COLOR)"
+	@if ! opam list --installed dune 2>/dev/null | grep -q "^dune" || \
+	    ! opam list --installed yojson 2>/dev/null | grep -q "^yojson"; then \
 		echo "$(BOLD)$(ORANGE)Installing missing dependencies via OPAM...$(DEF_COLOR)"; \
 		opam update; \
 		opam install -y dune yojson; \
