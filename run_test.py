@@ -14,6 +14,7 @@ TEST_CASES = [
     ("Unary Add: 3 + 2 = 5", "machines/unary_add.json", "111+11", False),
     ("Unary Add: 1 + 1 = 2", "machines/unary_add.json", "1+1", False),
     ("Unary Add: 10 + 10 = 20", "machines/unary_add.json", "1111111111+1111111111", False),
+    ("Unary Add: 0 + 5 = 5", "machines/unary_add.json", "+11111", False),
     ("Unary Add Error: No plus sign (Blocked)", "machines/unary_add.json", "111", True),
     ("Unary Add Error: Invalid character", "machines/unary_add.json", "111+11a", True),
 
@@ -22,6 +23,7 @@ TEST_CASES = [
     ("Palindrome: 'baab' (Even length - Yes)", "machines/palindrome.json", "baab", False),
     ("Palindrome: 'a' (Single char - Yes)", "machines/palindrome.json", "a", False),
     ("Palindrome: 'ab' (No)", "machines/palindrome.json", "ab", False),
+    ("Palindrome: '' (Empty - Yes)", "machines/palindrome.json", "", False),
     ("Palindrome Error: Invalid character", "machines/palindrome.json", "abc", True),
 
     # --- 3. 0n1n LANGUAGE ---
@@ -29,6 +31,7 @@ TEST_CASES = [
     ("0n1n: '000011' (Too many 0s - No)", "machines/0n1n.json", "000011", False),
     ("0n1n: '00111' (Too many 1s - No)", "machines/0n1n.json", "00111", False),
     ("0n1n: '111000' (Wrong order - No)", "machines/0n1n.json", "111000", False),
+    ("0n1n: '' (Empty - Yes)", "machines/0n1n.json", "", False),
     ("0n1n Error: Invalid character", "machines/0n1n.json", "00112", True),
 
     # --- 4. 0^2n LANGUAGE ---
@@ -37,16 +40,22 @@ TEST_CASES = [
     ("0^2n: '00000000' (Length 8 = 2^3 - Yes)", "machines/02n.json", "00000000", False),
     ("0^2n: '000' (Length 3 - No)", "machines/02n.json", "000", False),
     ("0^2n: '000000' (Length 6 - No)", "machines/02n.json", "000000", False),
-    ("0^2n Error: Invalid character", "machines/02n.json", "00x0", True),
+    ("0^2n: '' (Empty - Yes)", "machines/02n.json", "", False),
+    ("0^2n Error: Invalid character", "machines/02n.json", "0010", True),
 
-    # --- 5. UNIVERSAL TURING MACHINE ---
-    ("UTM: Simulate 3 + 2 = 5", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#111*p11d", False),
-    ("UTM: Simulate 1 + 1 = 2", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#1*p1d", False),
-    ("UTM Error: Virtual input blocked (No plus)", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#111*11d", True),
+    # --- 5. UNIVERSAL TURING MACHINE (simulates unary_add) ---
+    ("UTM: 3 + 2 = 5", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#111*p11d", False),
+    ("UTM: 1 + 1 = 2", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#1*p1d", False),
+    ("UTM: 2 + 3 = 5", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#11*p111d", False),
+    ("UTM: 10 + 10 = 20", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#1111111111*p1111111111d", False),
+    ("UTM: 0 + 5 = 5", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#*p11111d", False),
+    ("UTM Error: No plus sign (blocked)", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#111*", True),
+    ("UTM Error: Invalid character in virtual input", "machines/utm.json", "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#111*1a1d", True),
 
     # --- 6. ROBUSTNESS & CLI ---
     ("CLI Error: Missing JSON file", "machines/does_not_exist.json", "111", True),
     ("CLI Error: Empty input string", "machines/unary_add.json", "", True),
+    ("CLI Error: Wrong number of arguments", "machines/unary_add.json", "", True),
 ]
 
 def run_command(cmd):
@@ -90,7 +99,6 @@ def main():
             log.write("=" * 80 + "\n\n")
 
             # Determine if the test behavior was correct
-            # If we expected a failure/block, exit code should be non-zero (1) or stderr should have content
             has_failed = (code != 0) or ("blocked" in stdout.lower()) or ("error" in stderr.lower())
             
             if expected_fail == has_failed:
@@ -100,13 +108,6 @@ def main():
             else:
                 status = "FAIL"
                 print(f"[{idx:02d}/{total_tests:02d}] \033[91mFAIL\033[0m: {name} (Expected fail: {expected_fail}, Got fail: {has_failed})")
-
-        # Add CLI tests with wrong number of arguments
-        log.write("--- EXTRA TEST: CLI Wrong Args Count ---\n")
-        cmd = f"{EXECUTABLE} machines/unary_add.json"
-        stdout, stderr, code = run_command(cmd)
-        log.write(f"Command: {cmd}\n[STDERR]\n{stderr}\nExit Code: {code}\n")
-        log.write("=" * 80 + "\n\n")
 
         print("\n==================================================")
         if success_count == total_tests:
