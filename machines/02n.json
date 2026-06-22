@@ -2,29 +2,43 @@
   "name": "02n",
   "alphabet": [ "0", "x", "y", "n", "." ],
   "blank": ".",
-  "states": [ "find_start", "first_0", "cross_next", "keep_next", "write_y", "write_n", "HALT" ],
-  "initial": "find_start",
+  "states": [
+    "seek", "check", "check_one", "start_round",
+    "skip_pass", "mark_pass",
+    "write_y", "write_n", "HALT"
+  ],
+  "initial": "seek",
   "finals": [ "HALT" ],
   "transitions": {
-    "find_start": [
-      { "read": "0", "to_state": "find_start", "write": "0", "action": "LEFT" },
-      { "read": "x", "to_state": "find_start", "write": "x", "action": "LEFT" },
-      { "read": ".", "to_state": "first_0",     "write": ".", "action": "RIGHT" }
+    "seek": [
+      { "read": "0", "to_state": "seek",  "write": "0", "action": "LEFT" },
+      { "read": "x", "to_state": "seek",  "write": "x", "action": "LEFT" },
+      { "read": ".", "to_state": "check", "write": ".", "action": "RIGHT" }
     ],
-    "first_0": [
-      { "read": "x", "to_state": "first_0",    "write": "x", "action": "RIGHT" },
-      { "read": "0", "to_state": "cross_next", "write": "0", "action": "RIGHT" },
-      { "read": ".", "to_state": "write_n",    "write": ".", "action": "RIGHT" }
+    "check": [
+      { "read": "x", "to_state": "check",     "write": "x", "action": "RIGHT" },
+      { "read": "0", "to_state": "check_one", "write": "0", "action": "RIGHT" },
+      { "read": ".", "to_state": "write_n",   "write": ".", "action": "RIGHT" }
     ],
-    "cross_next": [
-      { "read": "x", "to_state": "cross_next", "write": "x", "action": "RIGHT" },
-      { "read": "0", "to_state": "keep_next",  "write": "x", "action": "RIGHT" },
-      { "read": ".", "to_state": "write_y",    "write": ".", "action": "RIGHT" }
+    "check_one": [
+      { "read": "x", "to_state": "check_one",   "write": "x", "action": "RIGHT" },
+      { "read": ".", "to_state": "write_y",      "write": ".", "action": "RIGHT" },
+      { "read": "0", "to_state": "start_round",  "write": "0", "action": "LEFT" }
     ],
-    "keep_next": [
-      { "read": "x", "to_state": "keep_next",  "write": "x", "action": "RIGHT" },
-      { "read": "0", "to_state": "cross_next", "write": "0", "action": "RIGHT" },
-      { "read": ".", "to_state": "find_start", "write": ".", "action": "LEFT" }
+    "start_round": [
+      { "read": "0", "to_state": "start_round", "write": "0", "action": "LEFT" },
+      { "read": "x", "to_state": "start_round", "write": "x", "action": "LEFT" },
+      { "read": ".", "to_state": "skip_pass",   "write": ".", "action": "RIGHT" }
+    ],
+    "skip_pass": [
+      { "read": "x", "to_state": "skip_pass", "write": "x", "action": "RIGHT" },
+      { "read": "0", "to_state": "mark_pass", "write": "0", "action": "RIGHT" },
+      { "read": ".", "to_state": "seek",       "write": ".", "action": "LEFT" }
+    ],
+    "mark_pass": [
+      { "read": "x", "to_state": "mark_pass", "write": "x", "action": "RIGHT" },
+      { "read": "0", "to_state": "skip_pass", "write": "x", "action": "RIGHT" },
+      { "read": ".", "to_state": "write_n",   "write": ".", "action": "RIGHT" }
     ],
     "write_y": [
       { "read": "0", "to_state": "write_y", "write": "0", "action": "RIGHT" },
