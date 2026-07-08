@@ -10,17 +10,21 @@
   ],
   "initial": "find_first",
   "finals": [ "HALT" ],
+
   "transitions": {
+
     "find_first": [
       { "read": "x", "to_state": "find_first", "write": "x", "action": "RIGHT" },
       { "read": "0", "to_state": "find_second", "write": "x", "action": "RIGHT" },
       { "read": ".", "to_state": "HALT", "write": "y", "action": "RIGHT" }
     ],
+
     "find_second": [
       { "read": "x", "to_state": "find_second", "write": "x", "action": "RIGHT" },
       { "read": "0", "to_state": "rewind", "write": "x", "action": "LEFT" },
       { "read": ".", "to_state": "HALT", "write": "n", "action": "RIGHT" }
     ],
+    
     "rewind": [
       { "read": "x", "to_state": "rewind", "write": "x", "action": "LEFT" },
       { "read": ".", "to_state": "find_first", "write": ".", "action": "RIGHT" }

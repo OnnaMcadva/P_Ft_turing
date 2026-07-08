@@ -5,11 +5,14 @@
   "states": [ "find_plus", "find_end", "HALT" ],
   "initial": "find_plus",
   "finals": [ "HALT" ],
+
   "transitions": {
+
     "find_plus": [
       { "read": "1", "to_state": "find_plus", "write": "1", "action": "RIGHT" },
       { "read": "+", "to_state": "find_end", "write": "1", "action": "RIGHT" }
     ],
+    
     "find_end": [
       { "read": "1", "to_state": "find_end", "write": "1", "action": "RIGHT" },
       { "read": ".", "to_state": "HALT", "write": ".", "action": "LEFT" }
