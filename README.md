@@ -110,61 +110,61 @@ The `machines/` directory contains 5 pre-configured Turing Machines:
 
 ---
 
-## Comprehensive Evaluation Test Suite
+## Manual Test Cases
 
-Use these test cases during peer evaluation to thoroughly test the simulator and the machines.
+Use these short manual checks to verify the simulator and each machine during evaluation.
 
 ### 1. Unary Addition (`unary_add.json`)
 Computes $A + B = C$ in unary representation.
 
-* **Test 1.1: Standard Addition ($3 + 2 = 5$)**
+* **Test 1.1: Standard addition ($3 + 2 = 5$)**
 ```bash
 ./ft_turing machines/unary_add.json "111+11"
 ```
 *Expected Result:* Tape ends with `11111` under the head.
-*Complexity:* **8 steps, 7 cells**.
 
-* **Test 1.2: Minimal Addition ($1 + 1 = 2$)**
+* **Test 1.2: Minimal addition ($1 + 1 = 2$)**
 ```bash
 ./ft_turing machines/unary_add.json "1+1"
 ```
 *Expected Result:* Tape ends with `11` under the head.
-*Complexity:* **5 steps, 4 cells**.
 
-* **Test 1.3: Large Addition ($10 + 10 = 20$)**
+* **Test 1.3: No plus sign (blocked)**
+```bash
+./ft_turing machines/unary_add.json "111"
+```
+*Expected Result:* The machine halts cleanly as blocked.
+
+* **Test 1.4: Larger addition ($10 + 10 = 20$)**
 ```bash
 ./ft_turing machines/unary_add.json "1111111111+1111111111"
 ```
 *Expected Result:* Tape ends with 20 ones.
-*Complexity:* **23 steps, 22 cells**.
 
 ---
 
 ### 2. Palindrome Detector (`palindrome.json`)
 Checks if the input string reads the same backwards as forwards. Writes `y` (yes) or `n` (no) at the end.
 
-* **Test 2.1: Single Character Palindrome (Accepted)**
+* **Test 2.1: Single-character palindrome (accepted)**
 ```bash
 ./ft_turing machines/palindrome.json "a"
 ```
 *Expected Result:* Tape ends with `xy` (Accepted).
-*Complexity:* **4 steps, 3 cells**.
 
-* **Test 2.2: Odd-length Palindrome (Accepted)**
+* **Test 2.2: Odd-length palindrome (accepted)**
 ```bash
 ./ft_turing machines/palindrome.json "aba"
 ```
 *Expected Result:* Tape ends with `xxxy` (Accepted).
-*Complexity:* **14 steps, 6 cells**.
 
-* **Test 2.3: Even-length Palindrome (Accepted)**
+* **Test 2.3: Even-length palindrome (accepted)**
 ```bash
 ./ft_turing machines/palindrome.json "baab"
 ```
 *Expected Result:* Tape ends with `xxxxy` (Accepted).
-*Complexity:* **24 steps, 8 cells**.
 
-* **Test 2.4: Invalid Characters (Validation Error)**
+* **Test 2.4: Invalid character (validation error)**
 ```bash
 ./ft_turing machines/palindrome.json "abc"
 ```
@@ -176,47 +176,77 @@ Checks if the input string reads the same backwards as forwards. Writes `y` (yes
 ### 3. $0^n1^n$ Language (`0n1n.json`)
 Checks if the input consists of $n$ zeros followed by exactly $n$ ones. Writes `y` or `n` at the end.
 
-* **Test 3.1: Balanced String ($0^3 1^3$ - Accepted)**
+* **Test 3.1: Balanced string ($0^3 1^3$ - accepted)**
 ```bash
 ./ft_turing machines/0n1n.json "000111"
 ```
 *Expected Result:* Tape ends with `y` (Accepted).
 
-* **Test 3.2: Unbalanced - Too many zeros (Rejected)**
+* **Test 3.2: Too many zeros (rejected)**
 ```bash
 ./ft_turing machines/0n1n.json "000011"
 ```
 *Expected Result:* Tape ends with `n` (Rejected).
 
-* **Test 3.3: Unbalanced - Too many ones (Rejected)**
+* **Test 3.3: Too many ones (rejected)**
 ```bash
 ./ft_turing machines/0n1n.json "00111"
 ```
 *Expected Result:* Tape ends with `n` (Rejected).
 
+* **Test 3.4: Wrong order (rejected)**
+```bash
+./ft_turing machines/0n1n.json "111000"
+```
+*Expected Result:* Tape ends with `n` (Rejected).
+
 ---
 
-### 4. $0^{2^n}$ Language (`02n.json`)
-Checks if the number of zeros is a power of 2 ($2^0=1$, $2^1=2$, $2^2=4$, $2^3=8$, etc.). Writes `y` or `n` at the end.
+### 4. $0^{2n}$ Language (`02n.json`)
+Checks if the input contains an even number of zeros: $2, 4, 6, \dots$ (and, if you accept $n=0$, the empty string). Writes `y` or `n` at the end.
 
-* **Test 4.1: Power of 2 (Length 4 - Accepted)**
+* **Test 4.1: Length 2 (accepted)**
+```bash
+./ft_turing machines/02n.json "00"
+```
+*Expected Result:* Tape ends with `y` (Accepted).
+
+* **Test 4.2: Length 4 (accepted)**
 ```bash
 ./ft_turing machines/02n.json "0000"
 ```
 *Expected Result:* Tape ends with `y` (Accepted).
 
-* **Test 4.2: Non-power of 2 (Length 3 - Rejected)**
+* **Test 4.3: Length 6 (accepted)**
+```bash
+./ft_turing machines/02n.json "000000"
+```
+*Expected Result:* Tape ends with `y` (Accepted).
+
+* **Test 4.4: Odd length (Length 3 - rejected)**
 ```bash
 ./ft_turing machines/02n.json "000"
 ```
 *Expected Result:* Tape ends with `n` (Rejected).
+
+* **Test 4.5: Odd length (Length 5 - rejected)**
+```bash
+./ft_turing machines/02n.json "00000"
+```
+*Expected Result:* Tape ends with `n` (Rejected).
+
+* **Test 4.6: Empty input (accepted if you treat $n=0$ as valid)**
+```bash
+./ft_turing machines/02n.json ""
+```
+*Expected Result:* Tape ends with `y` (Accepted).
 
 ---
 
 ### 5. Universal Turing Machine (`utm.json`)
 The Universal Turing Machine (UTM) reads the transition table of `unary_add` directly from the tape, parses it, and executes it on the virtual input.
 
-#### Tape Encoding Scheme:
+#### Tape encoding scheme:
 The tape is divided into three sections using the `#` character:
 `[Current State] # [Transition Rules] # [Virtual Tape with Head Marker '*']`
 
@@ -232,19 +262,19 @@ To simulate `unary_add` computing $3 + 2 = 5$ on the UTM, run:
 ```bash
 ./ft_turing machines/utm.json "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#111*p11d"
 ```
-*Expected Result:* The UTM will read the rules from the tape, execute them step-by-step, and halt when the virtual state becomes `H`.
+*Expected Result:* The UTM reads the rules from the tape, executes them step-by-step, and halts when the virtual state becomes `H`.
 
 ---
 
-### 6. Robustness & Error Handling Tests (No Crashes)
+### 6. Robustness & error handling tests
 
-* **Test 6.1: Missing JSON File**
+* **Test 6.1: Missing JSON file**
 ```bash
 ./ft_turing machines/does_not_exist.json "111"
 ```
 *Expected Result:* Clean exit with error: `Error parsing machine: File system error...`
 
-* **Test 6.2: Blocked Machine (No valid transition)**
+* **Test 6.2: Blocked machine (no valid transition)**
 ```bash
 ./ft_turing machines/unary_add.json "111"
 ```

@@ -57,14 +57,12 @@ install_deps:
 		exit 1; \
 	fi
 	@if ! command -v ocamlopt > /dev/null; then \
-		echo "$(BOLD)$(RED)Error: ocamlopt not found. Please install OCaml via OPAM:$(DEF_COLOR)"; \
-		echo "  opam install ocaml"; \
-		exit 1; \
+		echo "$(BOLD)$(ORANGE)ocamlopt not found. Installing OCaml via OPAM...$(DEF_COLOR)"; \
+		opam install -y ocaml; \
 	fi
 	@if ! command -v ocamlc > /dev/null; then \
-		echo "$(BOLD)$(RED)Error: ocamlc not found. Please install OCaml via OPAM:$(DEF_COLOR)"; \
-		echo "  opam install ocaml"; \
-		exit 1; \
+		echo "$(BOLD)$(ORANGE)ocamlc not found. Installing OCaml via OPAM...$(DEF_COLOR)"; \
+		opam install -y ocaml; \
 	fi
 	@echo "$(BOLD)$(GREEN)OCaml compilers (ocamlopt, ocamlc): OK$(DEF_COLOR)"
 	@if ! opam list --installed dune 2>/dev/null | grep -q "^dune" || \

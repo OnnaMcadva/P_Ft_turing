@@ -35,9 +35,10 @@ TEST_CASES = [
     ("0n1n Error: Invalid character", "machines/0n1n.json", "00112", True),
 
     # --- 4. 0^2n LANGUAGE ---
-    ("0^2n: '0000' (Length 4 = 2^2 - Yes)", "machines/02n.json", "0000", False),
-    ("0^2n: '0' (Length 1 = 2^0 - Yes)", "machines/02n.json", "0", False),
-    ("0^2n: '00000000' (Length 8 = 2^3 - Yes)", "machines/02n.json", "00000000", False),
+    ("0^2n: '00' (Length 2 - Yes)", "machines/02n.json", "00", False),
+    ("0^2n: '0000' (Length 4 - Yes)", "machines/02n.json", "0000", False),
+    ("0^2n: '00000000' (Length 8 - Yes)", "machines/02n.json", "00000000", False),
+    ("0^2n: '0' (Length 1 - No)", "machines/02n.json", "0", False),
     ("0^2n: '000' (Length 3 - No)", "machines/02n.json", "000", False),
     ("0^2n: '000000' (Length 6 - No)", "machines/02n.json", "000000", False),
     ("0^2n: '' (Empty - Yes)", "machines/02n.json", "", False),
