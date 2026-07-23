@@ -1,5 +1,9 @@
 # ft_turing
 
+<img width="528" height="237" alt="изображение" src="https://github.com/user-attachments/assets/06d640e6-84fe-4e34-8b17-feda8598e9d3" />
+
+
+
 An elegant, purely functional single-tape Turing Machine simulator written in OCaml. This project simulates a Turing Machine based on a JSON configuration file and evaluates its execution, featuring a built-in **Time and Space Complexity Analyzer (Bonus Part)**.
 
 ---
