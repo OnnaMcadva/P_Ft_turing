@@ -103,7 +103,7 @@ The **Bonus Part** (Time and Space complexity analysis) is fully implemented and
 The `machines/` directory contains 5 pre-configured Turing Machines:
 
 1. **Unary Addition** (`machines/unary_add.json`): Computes the sum of two unary numbers separated by `+`.
-2. **Palindrome Detector** (`machines/palindrome.json`): Decides if the input string is a palindrome of 'a's and 'b's. Writes `y` or `n` at the end of the tape.
+2. **Palindrome Detector** (`machines/palindrome.json`): Decides if the input string is a palindrome of '0's and '1's. Writes `y` or `n` at the end of the tape.
 3. **$0^n1^n$ Language** (`machines/0n1n.json`): Decides if the input consists of $n$ zeros followed by exactly $n$ ones. Writes `y` or `n` at the end.
 4. **$0^{2^n}$ Language** (`machines/02n.json`): Decides if the length of the input of zeros is a power of 2. Writes `y` or `n` at the end.
 5. **Universal Turing Machine** (`machines/utm.json`): A mathematically rigorous machine designed to simulate the Unary Addition machine by reading its transition table directly from the tape.
