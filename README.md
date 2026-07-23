@@ -119,13 +119,13 @@ Computes $A + B = C$ in unary representation.
 
 * **Test 1.1: Standard addition ($3 + 2 = 5$)**
 ```bash
-./ft_turing machines/unary_add.json "111+11"
+./ft_turing machines/unary_add.json "111+11="
 ```
 *Expected Result:* Tape ends with `11111` under the head.
 
 * **Test 1.2: Minimal addition ($1 + 1 = 2$)**
 ```bash
-./ft_turing machines/unary_add.json "1+1"
+./ft_turing machines/unary_add.json "1+1="
 ```
 *Expected Result:* Tape ends with `11` under the head.
 
@@ -137,7 +137,7 @@ Computes $A + B = C$ in unary representation.
 
 * **Test 1.4: Larger addition ($10 + 10 = 20$)**
 ```bash
-./ft_turing machines/unary_add.json "1111111111+1111111111"
+./ft_turing machines/unary_add.json "1111111111+1111111111="
 ```
 *Expected Result:* Tape ends with 20 ones.
 
@@ -148,28 +148,28 @@ Checks if the input string reads the same backwards as forwards. Writes `y` (yes
 
 * **Test 2.1: Single-character palindrome (accepted)**
 ```bash
-./ft_turing machines/palindrome.json "a"
+./ft_turing machines/palindrome.json "0"
 ```
-*Expected Result:* Tape ends with `xy` (Accepted).
+*Expected Result:* Tape ends with `y` (Accepted).
 
 * **Test 2.2: Odd-length palindrome (accepted)**
 ```bash
-./ft_turing machines/palindrome.json "aba"
+./ft_turing machines/palindrome.json "10"
 ```
-*Expected Result:* Tape ends with `xxxy` (Accepted).
+*Expected Result:* Tape ends with `n` (Accepted).
 
 * **Test 2.3: Even-length palindrome (accepted)**
 ```bash
-./ft_turing machines/palindrome.json "baab"
+./ft_turing machines/palindrome.json "0110"
 ```
-*Expected Result:* Tape ends with `xxxxy` (Accepted).
+*Expected Result:* Tape ends with `y` (Accepted).
 
 * **Test 2.4: Invalid character (validation error)**
 ```bash
-./ft_turing machines/palindrome.json "abc"
+./ft_turing machines/palindrome.json "102"
 ```
 *Expected Result:* Fails input validation immediately because 'c' is not in the machine's alphabet.
-*Output:* `Error validating input: Input error: character 'c' is not in the alphabet.`
+*Output:* `Error validating input: Input error: character '2' is not in the alphabet.`
 
 ---
 

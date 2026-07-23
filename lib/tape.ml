@@ -45,18 +45,16 @@ let to_string (tape : t) : string =
   let left_part = List.rev tape.left in
   let h_index = List.length left_part in
   let full_tape = left_part @ [tape.current] @ tape.right in
-  
-  (* Pad the tape with blanks to ensure we can always extract a window *)
+
+  let start_idx = if h_index < 15 then 0 else h_index - 15 in
+  let needed_len = start_idx + 20 in
+
   let rec pad list len =
     if List.length list >= len then list
     else pad (list @ [tape.blank]) len
   in
-  let padded_tape = pad full_tape 40 in
-  
-  (* Calculate start index to keep the head visible within the 20-char window *)
-  let start_idx = if h_index < 15 then 0 else h_index - 15 in
-  
-  (* Extract exactly 20 characters *)
+  let padded_tape = pad full_tape (max 40 needed_len) in
+
   let rec sublist list start count =
     match list with
     | [] -> []
@@ -66,17 +64,15 @@ let to_string (tape : t) : string =
         else []
   in
   let window = sublist padded_tape start_idx 20 in
-  
-  (* Format the window with <char> representing the head *)
+
   let head_idx_in_window = h_index - start_idx in
   let rec format_window idx = function
     | [] -> ""
     | hd :: tl ->
-        let s = 
+        let s =
           if idx = head_idx_in_window then Printf.sprintf "<%c>" hd
           else String.make 1 hd
         in
         s ^ format_window (idx + 1) tl
   in
   "[" ^ format_window 0 window ^ "]"
-  

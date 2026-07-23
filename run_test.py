@@ -11,20 +11,20 @@ EXECUTABLE = "./ft_turing"
 # Format: (test_name, json_file, input_string, expected_to_fail_cli_or_blocked)
 TEST_CASES = [
     # --- 1. UNARY ADDITION ---
-    ("Unary Add: 3 + 2 = 5", "machines/unary_add.json", "111+11", False),
-    ("Unary Add: 1 + 1 = 2", "machines/unary_add.json", "1+1", False),
-    ("Unary Add: 10 + 10 = 20", "machines/unary_add.json", "1111111111+1111111111", False),
-    ("Unary Add: 0 + 5 = 5", "machines/unary_add.json", "+11111", False),
+    ("Unary Add: 3 + 2 = 5", "machines/unary_add.json", "111+11=", False),
+    ("Unary Add: 1 + 1 = 2", "machines/unary_add.json", "1+1=", False),
+    ("Unary Add: 10 + 10 = 20", "machines/unary_add.json", "1111111111+1111111111=", False),
+    ("Unary Add: 0 + 5 = 5", "machines/unary_add.json", "+11111=", False),
     ("Unary Add Error: No plus sign (Blocked)", "machines/unary_add.json", "111", True),
     ("Unary Add Error: Invalid character", "machines/unary_add.json", "111+11a", True),
 
     # --- 2. PALINDROME ---
-    ("Palindrome: 'aba' (Odd length - Yes)", "machines/palindrome.json", "aba", False),
-    ("Palindrome: 'baab' (Even length - Yes)", "machines/palindrome.json", "baab", False),
-    ("Palindrome: 'a' (Single char - Yes)", "machines/palindrome.json", "a", False),
-    ("Palindrome: 'ab' (No)", "machines/palindrome.json", "ab", False),
+    ("Palindrome: 'aba' (Odd length - Yes)", "machines/palindrome.json", "010", False),
+    ("Palindrome: 'baab' (Even length - Yes)", "machines/palindrome.json", "0110", False),
+    ("Palindrome: 'a' (Single char - Yes)", "machines/palindrome.json", "1", False),
+    ("Palindrome: 'ab' (No)", "machines/palindrome.json", "10", False),
     ("Palindrome: '' (Empty - Yes)", "machines/palindrome.json", "", False),
-    ("Palindrome Error: Invalid character", "machines/palindrome.json", "abc", True),
+    ("Palindrome Error: Invalid character", "machines/palindrome.json", "012", True),
 
     # --- 3. 0n1n LANGUAGE ---
     ("0n1n: '000111' (Balanced - Yes)", "machines/0n1n.json", "000111", False),

@@ -35,13 +35,19 @@ let find_transition (m : Machine.t) (state : string) (read_char : char) : Machin
       List.find_opt (fun t -> t.read = read_char) trans_list
 
 (* The main simulation loop using recursion (pure functional style) *)
-let simulate (m : Machine.t) (initial_input : string) : (stats, string) result =
+let simulate ?(max_steps = 1_000) (m : Machine.t) (initial_input : string) : (stats, string) result =
   print_header m;
   let init_tape = Tape.make initial_input m.blank in
 
   let rec step (state : string) (tape : Tape.t) (steps_count : int) (curr_pos : int) (min_pos : int) (max_pos : int) =
     if List.mem state m.finals then
+      let final_tape_str = Tape.to_string tape in
+      Printf.printf "Final tape: %s\n" final_tape_str;
       Ok { steps = steps_count; space = (max_pos - min_pos + 1) }
+    else if steps_count >= max_steps then
+      Error (Printf.sprintf
+        "Execution stopped after %d steps: machine likely does not halt on this input."
+        max_steps)
     else
       let current_char = Tape.read tape in
       match find_transition m state current_char with
@@ -53,7 +59,7 @@ let simulate (m : Machine.t) (initial_input : string) : (stats, string) result =
           (* Format output strictly according to the subject: "-> (" without extra spaces *)
           Printf.printf "%s (%s, %c)-> (%s, %c, %s)\n"
             tape_str state current_char t.to_state t.write action_str;
-          
+
           let written_tape = Tape.write tape t.write in
           let (new_tape, next_pos) =
             match t.action with
@@ -63,4 +69,3 @@ let simulate (m : Machine.t) (initial_input : string) : (stats, string) result =
           step t.to_state new_tape (steps_count + 1) next_pos (min min_pos next_pos) (max max_pos next_pos)
   in
   step m.initial init_tape 0 0 0 0
-  
