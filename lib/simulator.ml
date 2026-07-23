@@ -41,8 +41,8 @@ let simulate ?(max_steps = 1_000) (m : Machine.t) (initial_input : string) : (st
 
   let rec step (state : string) (tape : Tape.t) (steps_count : int) (curr_pos : int) (min_pos : int) (max_pos : int) =
     if List.mem state m.finals then
-      let final_tape_str = Tape.to_string tape in
-      Printf.printf "Final tape: %s\n" final_tape_str;
+      (* let final_tape_str = Tape.to_string tape in
+      Printf.printf "Final tape: %s\n" final_tape_str; *)
       Ok { steps = steps_count; space = (max_pos - min_pos + 1) }
     else if steps_count >= max_steps then
       Error (Printf.sprintf
