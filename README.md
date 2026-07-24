@@ -102,187 +102,296 @@ The **Bonus Part** (Time and Space complexity analysis) is fully implemented and
 
 ---
 
-## The 5 Included Machines
+## The 7 Included Machines
 
-The `machines/` directory contains 5 pre-configured Turing Machines:
+The `machines/` directory contains 7 pre-configured Turing Machines:
 
-1. **Unary Addition** (`machines/unary_add.json`): Computes the sum of two unary numbers separated by `+`.
-2. **Palindrome Detector** (`machines/palindrome.json`): Decides if the input string is a palindrome of '0's and '1's. Writes `y` or `n` at the end of the tape.
-3. **$0^n1^n$ Language** (`machines/0n1n.json`): Decides if the input consists of $n$ zeros followed by exactly $n$ ones. Writes `y` or `n` at the end.
-4. **$0^{2^n}$ Language** (`machines/02n.json`): Decides if the length of the input of zeros is a power of 2. Writes `y` or `n` at the end.
-5. **Universal Turing Machine** (`machines/utm.json`): A mathematically rigorous machine designed to simulate the Unary Addition machine by reading its transition table directly from the tape.
+1. **Unary Addition** (`machines/unary_add.json`): Computes the sum of two unary numbers separated by `+`. Uses states: `scanright1`, `scanright2`, `eraselast`, `HALT`.
+
+2. **Unary Subtraction** (`machines/unary_sub.json`): Computes the difference of two unary numbers separated by `-`. Uses states: `scanright`, `eraseone`, `subone`, `skip`, `HALT`.
+
+3. **Palindrome Detector (0/1)** (`machines/palindrome.json`): Decides if the input string (of '0's and '1's) is a palindrome. Writes `y` or `n` at the end of the tape.
+
+4. **Palindrome Detector (a/b)** (`machines/palindrome_x.json`): Decides if the input string (of 'a's and 'b's) is a palindrome. Writes `y` or `n` at the end of the tape.
+
+5. **$0^n1^n$ Language** (`machines/0n1n.json`): Decides if the input consists of $n$ zeros followed by exactly $n$ ones. Writes `y` or `n` at the end.
+
+6. **$0^{2n}$ Language** (`machines/02n.json`): Decides if the input contains an even number of zeros. Writes `y` or `n` at the end.
+
+7. **Universal Turing Machine** (`machines/utm_unary_add.json`): A specialized UTM designed to simulate the Unary Addition machine by reading its transition table directly from the tape.
 
 ---
 
 ## Manual Test Cases
 
-Use these short manual checks to verify the simulator and each machine during evaluation.
-
 ### 1. Unary Addition (`unary_add.json`)
-Computes $A + B = C$ in unary representation.
 
-* **Test 1.1: Standard addition ($3 + 2 = 5$)**
+* **Test 1.1: 3 + 2 = 5**
 ```bash
 ./ft_turing machines/unary_add.json "111+11="
 ```
-*Expected Result:* Tape ends with `11111` under the head.
+*Expected:* Tape ends with `11111`.
 
-* **Test 1.2: Minimal addition ($1 + 1 = 2$)**
+* **Test 1.2: 1 + 1 = 2**
 ```bash
 ./ft_turing machines/unary_add.json "1+1="
 ```
-*Expected Result:* Tape ends with `11` under the head.
+*Expected:* Tape ends with `11`.
 
-* **Test 1.3: No plus sign (blocked)**
+* **Test 1.3: 0 + 5 = 5**
 ```bash
-./ft_turing machines/unary_add.json "111"
+./ft_turing machines/unary_add.json "+11111="
 ```
-*Expected Result:* The machine halts cleanly as blocked.
+*Expected:* Tape ends with `11111`.
 
-* **Test 1.4: Larger addition ($10 + 10 = 20$)**
+* **Test 1.4: 10 + 10 = 20**
 ```bash
 ./ft_turing machines/unary_add.json "1111111111+1111111111="
 ```
-*Expected Result:* Tape ends with 20 ones.
+*Expected:* Tape ends with 20 ones.
 
----
-
-### 2. Palindrome Detector (`palindrome.json`)
-Checks if the input string reads the same backwards as forwards. Writes `y` (yes) or `n` (no) at the end.
-
-* **Test 2.1: Single-character palindrome (accepted)**
-```bash
-./ft_turing machines/palindrome.json "0"
-```
-*Expected Result:* Tape ends with `y` (Accepted).
-
-* **Test 2.2: Odd-length palindrome (accepted)**
-```bash
-./ft_turing machines/palindrome.json "10"
-```
-*Expected Result:* Tape ends with `n` (Accepted).
-
-* **Test 2.3: Even-length palindrome (accepted)**
-```bash
-./ft_turing machines/palindrome.json "0110"
-```
-*Expected Result:* Tape ends with `y` (Accepted).
-
-* **Test 2.4: Invalid character (validation error)**
-```bash
-./ft_turing machines/palindrome.json "102"
-```
-*Expected Result:* Fails input validation immediately because 'c' is not in the machine's alphabet.
-*Output:* `Error validating input: Input error: character '2' is not in the alphabet.`
-
----
-
-### 3. $0^n1^n$ Language (`0n1n.json`)
-Checks if the input consists of $n$ zeros followed by exactly $n$ ones. Writes `y` or `n` at the end.
-
-* **Test 3.1: Balanced string ($0^3 1^3$ - accepted)**
-```bash
-./ft_turing machines/0n1n.json "000111"
-```
-*Expected Result:* Tape ends with `y` (Accepted).
-
-* **Test 3.2: Too many zeros (rejected)**
-```bash
-./ft_turing machines/0n1n.json "000011"
-```
-*Expected Result:* Tape ends with `n` (Rejected).
-
-* **Test 3.3: Too many ones (rejected)**
-```bash
-./ft_turing machines/0n1n.json "00111"
-```
-*Expected Result:* Tape ends with `n` (Rejected).
-
-* **Test 3.4: Wrong order (rejected)**
-```bash
-./ft_turing machines/0n1n.json "111000"
-```
-*Expected Result:* Tape ends with `n` (Rejected).
-
----
-
-### 4. $0^{2n}$ Language (`02n.json`)
-Checks if the input contains an even number of zeros: $2, 4, 6, \dots$ (and, if you accept $n=0$, the empty string). Writes `y` or `n` at the end.
-
-* **Test 4.1: Length 2 (accepted)**
-```bash
-./ft_turing machines/02n.json "00"
-```
-*Expected Result:* Tape ends with `y` (Accepted).
-
-* **Test 4.2: Length 4 (accepted)**
-```bash
-./ft_turing machines/02n.json "0000"
-```
-*Expected Result:* Tape ends with `y` (Accepted).
-
-* **Test 4.3: Length 6 (accepted)**
-```bash
-./ft_turing machines/02n.json "000000"
-```
-*Expected Result:* Tape ends with `y` (Accepted).
-
-* **Test 4.4: Odd length (Length 3 - rejected)**
-```bash
-./ft_turing machines/02n.json "000"
-```
-*Expected Result:* Tape ends with `n` (Rejected).
-
-* **Test 4.5: Odd length (Length 5 - rejected)**
-```bash
-./ft_turing machines/02n.json "00000"
-```
-*Expected Result:* Tape ends with `n` (Rejected).
-
-* **Test 4.6: Empty input (accepted if you treat $n=0$ as valid)**
-```bash
-./ft_turing machines/02n.json ""
-```
-*Expected Result:* Tape ends with `y` (Accepted).
-
----
-
-### 5. Universal Turing Machine (`utm.json`)
-The Universal Turing Machine (UTM) reads the transition table of `unary_add` directly from the tape, parses it, and executes it on the virtual input.
-
-#### Tape encoding scheme:
-The tape is divided into three sections using the `#` character:
-`[Current State] # [Transition Rules] # [Virtual Tape with Head Marker '*']`
-
-For `unary_add`, the characters are mapped as follows:
-- `+` is encoded as `p`
-- `.` (blank) is encoded as `d`
-
-The rules are written as 5-character blocks: `[State][Read][Write][Direction][NextState]`.
-Rules list: `A11RA;Ap1RB;B11RB;BddLC;C1dLH`
-
-#### Running the UTM:
-To simulate `unary_add` computing $3 + 2 = 5$ on the UTM, run:
-```bash
-./ft_turing machines/utm.json "A#A11RA;Ap1RB;B11RB;BddLC;C1dLH#111*p11d"
-```
-*Expected Result:* The UTM reads the rules from the tape, executes them step-by-step, and halts when the virtual state becomes `H`.
-
----
-
-### 6. Robustness & error handling tests
-
-* **Test 6.1: Missing JSON file**
-```bash
-./ft_turing machines/does_not_exist.json "111"
-```
-*Expected Result:* Clean exit with error: `Error parsing machine: File system error...`
-
-* **Test 6.2: Blocked machine (no valid transition)**
+* **Test 1.5: No plus sign (blocked)**
 ```bash
 ./ft_turing machines/unary_add.json "111"
 ```
-*Expected Result:* The machine starts, but halts cleanly when blocked: `Simulation halted: Machine blocked in state 'find_plus' reading character '.'.`
+*Expected:* `Simulation halted: Machine blocked in state 'scanright1' reading character '.'.`
+
+---
+
+### 2. Unary Subtraction (`unary_sub.json`)
+
+* **Test 2.1: 5 - 2 = 3**
+```bash
+./ft_turing machines/unary_sub.json "11111-11="
+```
+*Expected:* Tape ends with `111`.
+
+* **Test 2.2: 2 - 1 = 1**
+```bash
+./ft_turing machines/unary_sub.json "11-1="
+```
+*Expected:* Tape ends with `1`.
+
+* **Test 2.3: 3 - 3 = 0**
+```bash
+./ft_turing machines/unary_sub.json "111-111="
+```
+*Expected:* Tape ends with `.` (blank).
+
+* **Test 2.4: No minus sign (blocked)**
+```bash
+./ft_turing machines/unary_sub.json "11111"
+```
+*Expected:* `Simulation halted: Machine blocked in state 'scanright' reading character '.'.`
+
+---
+
+### 3. Palindrome Detector (0/1) (`palindrome.json`)
+
+* **Test 3.1: Single char - accepted**
+```bash
+./ft_turing machines/palindrome.json "0"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 3.2: "101" - accepted**
+```bash
+./ft_turing machines/palindrome.json "101"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 3.3: "0110" - accepted**
+```bash
+./ft_turing machines/palindrome.json "0110"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 3.4: "10" - rejected**
+```bash
+./ft_turing machines/palindrome.json "10"
+```
+*Expected:* Tape ends with `n`.
+
+* **Test 3.5: Invalid character**
+```bash
+./ft_turing machines/palindrome.json "102"
+```
+*Expected:* `Error validating input: Input error: character '2' is not in the alphabet.`
+
+---
+
+### 4. Palindrome Detector (a/b) (`palindrome_x.json`)
+
+* **Test 4.1: Single char - accepted**
+```bash
+./ft_turing machines/palindrome_x.json "a"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 4.2: "aba" - accepted**
+```bash
+./ft_turing machines/palindrome_x.json "aba"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 4.3: "abba" - accepted**
+```bash
+./ft_turing machines/palindrome_x.json "abba"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 4.4: "ab" - rejected**
+```bash
+./ft_turing machines/palindrome_x.json "ab"
+```
+*Expected:* Tape ends with `n`.
+
+* **Test 4.5: Invalid character**
+```bash
+./ft_turing machines/palindrome_x.json "abc"
+```
+*Expected:* `Error validating input: Input error: character 'c' is not in the alphabet.`
+
+---
+
+### 5. $0^n1^n$ Language (`0n1n.json`)
+
+* **Test 5.1: "000111" - accepted ($n=3$)**
+```bash
+./ft_turing machines/0n1n.json "000111"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 5.2: "000011" - rejected (too many 0s)**
+```bash
+./ft_turing machines/0n1n.json "000011"
+```
+*Expected:* Tape ends with `n`.
+
+* **Test 5.3: "00111" - rejected (too many 1s)**
+```bash
+./ft_turing machines/0n1n.json "00111"
+```
+*Expected:* Tape ends with `n`.
+
+* **Test 5.4: "111000" - rejected (wrong order)**
+```bash
+./ft_turing machines/0n1n.json "111000"
+```
+*Expected:* Tape ends with `n`.
+
+* **Test 5.5: Empty string - accepted ($n=0$)**
+```bash
+./ft_turing machines/0n1n.json ""
+```
+*Expected:* Tape ends with `y`.
+
+---
+
+### 6. $0^{2n}$ Language (`02n.json`)
+
+* **Test 6.1: "00" - accepted ($n=1$)**
+```bash
+./ft_turing machines/02n.json "00"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 6.2: "0000" - accepted ($n=2$)**
+```bash
+./ft_turing machines/02n.json "0000"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 6.3: "000000" - accepted ($n=3$)**
+```bash
+./ft_turing machines/02n.json "000000"
+```
+*Expected:* Tape ends with `y`.
+
+* **Test 6.4: "000" - rejected (odd length)**
+```bash
+./ft_turing machines/02n.json "000"
+```
+*Expected:* Tape ends with `n`.
+
+* **Test 6.5: "00000" - rejected (odd length)**
+```bash
+./ft_turing machines/02n.json "00000"
+```
+*Expected:* Tape ends with `n`.
+
+* **Test 6.6: Empty string - accepted ($n=0$)**
+```bash
+./ft_turing machines/02n.json ""
+```
+*Expected:* Tape ends with `y`.
+
+---
+
+### 7. Universal Turing Machine (`utm_unary_add.json`)
+
+The UTM simulates `unary_add` by reading the transition table from the tape.
+
+**Encoding:** `[State]#[Virtual Tape]`
+- `A` = `scanright1`, `B` = `scanright2`, `C` = `eraselast`, `H` = `HALT`
+
+* **Test 7.1: 3 + 2 = 5**
+```bash
+./ft_turing machines/utm_unary_add.json "A#111+11="
+```
+*Expected:* Tape ends with `11111`.
+
+* **Test 7.2: 1 + 1 = 2**
+```bash
+./ft_turing machines/utm_unary_add.json "A#1+1="
+```
+*Expected:* Tape ends with `11`.
+
+* **Test 7.3: 0 + 5 = 5**
+```bash
+./ft_turing machines/utm_unary_add.json "A#+11111="
+```
+*Expected:* Tape ends with `11111`.
+
+* **Test 7.4: 10 + 10 = 20**
+```bash
+./ft_turing machines/utm_unary_add.json "A#1111111111+1111111111="
+```
+*Expected:* Tape ends with 20 ones.
+
+* **Test 7.5: Starting from state B**
+```bash
+./ft_turing machines/utm_unary_add.json "B#111+11="
+```
+*Expected:* Tape ends with `11111`.
+
+* **Test 7.6: Invalid state (blocked)**
+```bash
+./ft_turing machines/utm_unary_add.json "Z#111+11="
+```
+*Expected:* `Simulation halted: Machine blocked in state 'read_state' reading character 'Z'.`
+
+* **Test 7.7: Missing `#` separator (blocked)**
+```bash
+./ft_turing machines/utm_unary_add.json "A111+11="
+```
+*Expected:* `Simulation halted: Machine blocked in state 'read_state' reading character '1'.`
+
+---
+
+### 8. Robustness & error handling
+
+* **Test 8.1: Missing JSON file**
+```bash
+./ft_turing machines/does_not_exist.json "111"
+```
+*Expected:* `Error parsing machine: File system error...`
+
+* **Test 8.2: Empty input string**
+```bash
+./ft_turing machines/unary_add.json ""
+```
+*Expected:* `Error validating input: Input cannot be empty`.
 
 ---
 
