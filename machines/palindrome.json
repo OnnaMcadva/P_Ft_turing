@@ -12,11 +12,10 @@
     "erase_first",
     "write_y",
     "write_n",
-    "halt_y",
-    "halt_n"
+    "HALT"
   ],
   "initial": "start",
-  "finals": ["halt_y", "halt_n"],
+  "finals": ["HALT"],
   "transitions": {
     "start": [
       { "read": "0", "to_state": "right0", "write": "0", "action": "RIGHT" },
@@ -54,12 +53,12 @@
     "write_y": [
       { "read": "0", "to_state": "write_y", "write": "0", "action": "RIGHT" },
       { "read": "1", "to_state": "write_y", "write": "1", "action": "RIGHT" },
-      { "read": ".", "to_state": "halt_y", "write": "y", "action": "RIGHT" }
+      { "read": ".", "to_state": "HALT", "write": "y", "action": "RIGHT" }
     ],
     "write_n": [
       { "read": "0", "to_state": "write_n", "write": "0", "action": "RIGHT" },
       { "read": "1", "to_state": "write_n", "write": "1", "action": "RIGHT" },
-      { "read": ".", "to_state": "halt_n", "write": "n", "action": "RIGHT" }
+      { "read": ".", "to_state": "HALT", "write": "n", "action": "RIGHT" }
     ]
   }
 }
