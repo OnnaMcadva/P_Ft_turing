@@ -10,19 +10,19 @@ EXECUTABLE = "./ft_turing"
 # Define the test cases
 # Format: (test_name, json_file, input_string, expected_to_fail_cli_or_blocked)
 TEST_CASES = [
-    # --- 1. UNARY ADDITION ---
+    # --- 1. UNARY SUBTRACTION ---
+    ("Unary Sub: 5 - 2 = 3", "machines/unary_sub.json", "11111-11=", False),
+    ("Unary Sub: 2 - 1 = 1", "machines/unary_sub.json", "11-1=", False),
+    ("Unary Sub: 3 - 3 = 0", "machines/unary_sub.json", "111-111=", False),
+    ("Unary Sub Error: No minus sign (Blocked)", "machines/unary_sub.json", "11111", True),
+
+    # --- 2. UNARY ADDITION ---
     ("Unary Add: 3 + 2 = 5", "machines/unary_add.json", "111+11=", False),
     ("Unary Add: 1 + 1 = 2", "machines/unary_add.json", "1+1=", False),
     ("Unary Add: 10 + 10 = 20", "machines/unary_add.json", "1111111111+1111111111=", False),
     ("Unary Add: 0 + 5 = 5", "machines/unary_add.json", "+11111=", False),
     ("Unary Add Error: No plus sign (Blocked)", "machines/unary_add.json", "111", True),
     ("Unary Add Error: Invalid character", "machines/unary_add.json", "111+11a", True),
-
-    # --- 2. UNARY SUBTRACTION ---
-    ("Unary Sub: 5 - 2 = 3", "machines/unary_sub.json", "11111-11=", False),
-    ("Unary Sub: 2 - 1 = 1", "machines/unary_sub.json", "11-1=", False),
-    ("Unary Sub: 3 - 3 = 0", "machines/unary_sub.json", "111-111=", False),
-    ("Unary Sub Error: No minus sign (Blocked)", "machines/unary_sub.json", "11111", True),
 
     # --- 3. PALINDROME (0/1) ---
     ("Palindrome: '010' (Odd length - Yes)", "machines/palindrome.json", "010", False),
