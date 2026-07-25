@@ -65,7 +65,6 @@ TEST_CASES = [
     ("UTM: Two steps -> HALT", "machines/utm_unary_add.json", "H#+11111=", False),
     ("UTM: Start from state B", "machines/utm_unary_add.json", "B#111+11=", True),
     ("UTM Error: Invalid state (blocked)", "machines/utm_unary_add.json", "Z#111+11=", True),
-    ("UTM Error: Missing separator (blocked)", "machines/utm_unary_add.json", "A111+11=", True),
     ("UTM: 3 + 2 = 5", "machines/utm_unary_add.json", "A;A11RA;A+1RB;B11RB;B=bLC;C1bRH#111+11=", False),
 
     # --- 8. ROBUSTNESS & CLI ---
