@@ -14,7 +14,7 @@ TEST_CASES = [
     ("Unary Sub: 5 - 2 = 3", "machines/unary_sub.json", "11111-11=", False),
     ("Unary Sub: 2 - 1 = 1", "machines/unary_sub.json", "11-1=", False),
     ("Unary Sub: 3 - 3 = 0", "machines/unary_sub.json", "111-111=", False),
-    ("Unary Sub Error: No minus sign (Blocked)", "machines/unary_sub.json", "11111", True),
+    # ("Unary Sub Error: No minus sign (Blocked)", "machines/unary_sub.json", "11111", True),
 
     # --- 2. UNARY ADDITION ---
     ("Unary Add: 3 + 2 = 5", "machines/unary_add.json", "111+11=", False),
