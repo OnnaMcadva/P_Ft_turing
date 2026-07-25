@@ -35,7 +35,7 @@ let find_transition (m : Machine.t) (state : string) (read_char : char) : Machin
       List.find_opt (fun t -> t.read = read_char) trans_list
 
 (* The main simulation loop using recursion (pure functional style) *)
-let simulate ?(max_steps = 100) (m : Machine.t) (initial_input : string) : (stats, string) result =
+let simulate ?(max_steps = 100_000) (m : Machine.t) (initial_input : string) : (stats, string) result =
   print_header m;
   let init_tape = Tape.make initial_input m.blank in
 
