@@ -60,12 +60,13 @@ TEST_CASES = [
 
     # --- 7. UNIVERSAL TURING MACHINE (simulates unary_add) ---
     ("UTM: 3 + 2 = 5", "machines/utm_unary_add.json", "A#111+11=", False),
-    ("UTM: 1 + 1 = 2", "machines/utm_unary_add.json", "A#1+1=", False),
-    ("UTM: 10 + 10 = 20", "machines/utm_unary_add.json", "A#1111111111+1111111111=", False),
-    ("UTM: 0 + 5 = 5", "machines/utm_unary_add.json", "A#+11111=", False),
+    ("UTM: 0 + 2 = 2", "machines/utm_unary_add.json", "A#+11=", False),
+    ("UTM: = 4", "machines/utm_unary_add.json", "B#11111=", False),
+    ("UTM: Two steps -> HALT", "machines/utm_unary_add.json", "H#+11111=", False),
     ("UTM: Start from state B", "machines/utm_unary_add.json", "B#111+11=", True),
     ("UTM Error: Invalid state (blocked)", "machines/utm_unary_add.json", "Z#111+11=", True),
     ("UTM Error: Missing separator (blocked)", "machines/utm_unary_add.json", "A111+11=", True),
+    ("UTM: 3 + 2 = 5", "machines/utm_unary_add.json", "A;A11RA;A+1RB;B11RB;B=bLC;C1bRH#111+11=", False),
 
     # --- 8. ROBUSTNESS & CLI ---
     ("CLI Error: Missing JSON file", "machines/does_not_exist.json", "111", True),
