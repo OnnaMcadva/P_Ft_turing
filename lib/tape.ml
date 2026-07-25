@@ -42,19 +42,23 @@ let move_right (tape : t) : t =
 
 (* Convert the tape to a string representation with a fixed 20-character window *)
 let to_string (tape : t) : string =
+  (* Build the full tape list: reversed left part + current + right *)
   let left_part = List.rev tape.left in
-  let h_index = List.length left_part in
+  let h_index = List.length left_part in   (* index of head in full_tape *)
   let full_tape = left_part @ [tape.current] @ tape.right in
 
+  (* Compute start index of the 20‑character window, trying to keep head centered *)
   let start_idx = if h_index < 15 then 0 else h_index - 15 in
   let needed_len = start_idx + 20 in
 
+  (* Pad the tape with blanks to ensure we always have enough characters to show *)
   let rec pad list len =
     if List.length list >= len then list
     else pad (list @ [tape.blank]) len
   in
   let padded_tape = pad full_tape (max 40 needed_len) in
 
+  (* Extract a sublist of length 'count' starting at index 'start' *)
   let rec sublist list start count =
     match list with
     | [] -> []
@@ -65,7 +69,10 @@ let to_string (tape : t) : string =
   in
   let window = sublist padded_tape start_idx 20 in
 
+  (* Compute where the head falls inside the window *)
   let head_idx_in_window = h_index - start_idx in
+
+  (* Format the window: surround the head character with < > *)
   let rec format_window idx = function
     | [] -> ""
     | hd :: tl ->
