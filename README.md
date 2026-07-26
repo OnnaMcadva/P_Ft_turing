@@ -328,123 +328,87 @@ The `machines/` directory contains 7 pre-configured Turing Machines:
 
 ---
 
-### 7. Universal Turing Machine (`utm_unary_add.json`)
-
-The machine accepts an encoded unary addition machine followed by the input tape.
-
-**Encoding:**
-
-```
-<Initial State><Encoded Machine>#<Input Tape>
-```
-
-where
-
-- `A` = `scanright1`
-- `B` = `scanright2`
-- `C` = `eraselast`
-- `H` = `HALT`
-
-Example encoded machine:
-
-```
-A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;
-```
-
----
-
-#### Test 7.1 — 3 + 2
-
+### Test 7.1 — Start unary addition from state A (3+2)
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111+11="
+"A#111+11="
 ```
-
-Expected: tape ends with `11111`.
-
----
-
-#### Test 7.2 — 1 + 1
-
-```bash
-./ft_turing machines/utm_unary_add.json \
-"A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#1+1="
-```
-
-Expected: tape ends with `11`.
-
----
-
-#### Test 7.3 — 0 + 5
-
-```bash
-./ft_turing machines/utm_unary_add.json \
-"A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#+11111="
-```
-
-Expected: tape ends with `11111`.
-
----
-
-#### Test 7.4 — 10 + 10
-
-```bash
-./ft_turing machines/utm_unary_add.json \
-"A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#1111111111+1111111111="
-```
-
-Expected: tape ends with twenty `1` symbols.
-
----
-
-#### Test 7.5 — Start from state B
-
-```bash
-./ft_turing machines/utm_unary_add.json \
-"B111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111="
-```
-
 Expected:
+```
+11111
+```
+---
 
-The machine starts directly in the encoded state `B`, scans all unary digits, reaches `=`, switches to state `C`, erases the last unary digit and halts.
-
-Final tape:
-
+### Test 7.2 — Start unary addition from state A (1+1)
+```bash
+./ft_turing machines/utm_unary_add.json \
+"A#1+1="
+```
+Expected:
 ```
 11
 ```
+---
+
+### Test 7.3 — Start unary addition from state A (0+5)
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"B111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#1="
+"A#+11111="
 ```
+Expected:
+```
+11111
+```
+---
+
+### Test 7.4 — Larger input
+
 ```bash
-(empty tape)
+./ft_turing machines/utm_unary_add.json \
+"A#1111111111+1111111111="
+```
+Expected:
+```
+11111111111111111111
+```
+---
+### Test 7.5 — Start directly from B
+
+```bash
+./ft_turing machines/utm_unary_add.json \
+"B#111="
+```
+Expected:
+```
+11
 ```
 
 ---
 
-#### Test 7.6 — Immediate halt
-
+### Test 7.6 — Invalid state
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"H111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111+11="
+"Z#111+11="
 ```
+Expected:
 
-Expected: machine halts immediately.
+```
+Machine blocked in state 'read_state' reading character 'Z'
+```
 
 ---
 
-#### Test 7.7 — Invalid initial state
+### Test 7.7 — Missing separator
 
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"Z111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111+11="
+"A111+11="
 ```
 
 Expected:
 
 ```
-Simulation halted: Machine blocked in state 'read_state' reading character 'Z'.
+Machine blocked in state 'read_state'
 ```
 
 ---
