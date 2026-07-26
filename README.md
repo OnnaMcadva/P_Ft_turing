@@ -330,52 +330,107 @@ The `machines/` directory contains 7 pre-configured Turing Machines:
 
 ### 7. Universal Turing Machine (`utm_unary_add.json`)
 
-The UTM simulates `unary_add` by reading the transition table from the tape.
+The machine accepts an encoded unary addition machine followed by the input tape.
 
-**Encoding:** `[State]#[Virtual Tape]`
-- `A` = `scanright1`, `B` = `scanright2`, `C` = `eraselast`, `H` = `HALT`
+**Encoding:**
 
-* **Test 7.1: 3 + 2 = 5**
-```bash
-./ft_turing machines/utm_unary_add.json "A#111+11="
 ```
-*Expected:* Tape ends with `11111`.
-
-* **Test 7.2: 1 + 1 = 2**
-```bash
-./ft_turing machines/utm_unary_add.json "A#1+1="
+<Initial State><Encoded Machine>#<Input Tape>
 ```
-*Expected:* Tape ends with `11`.
 
-* **Test 7.3: 0 + 5 = 5**
-```bash
-./ft_turing machines/utm_unary_add.json "A#+11111="
-```
-*Expected:* Tape ends with `11111`.
+where
 
-* **Test 7.4: 10 + 10 = 20**
-```bash
-./ft_turing machines/utm_unary_add.json "A#1111111111+1111111111="
-```
-*Expected:* Tape ends with 20 ones.
+- `A` = `scanright1`
+- `B` = `scanright2`
+- `C` = `eraselast`
+- `H` = `HALT`
 
-* **Test 7.5: Starting from state B**
-```bash
-./ft_turing machines/utm_unary_add.json "B#111+11="
-```
-*Expected:* Tape ends with `11111`.
+Example encoded machine:
 
-* **Test 7.6: Invalid state (blocked)**
-```bash
-./ft_turing machines/utm_unary_add.json "Z#111+11="
 ```
-*Expected:* `Simulation halted: Machine blocked in state 'read_state' reading character 'Z'.`
+A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;
+```
 
-* **Test 7.7: Missing `#` separator (blocked)**
+---
+
+#### Test 7.1 — 3 + 2
+
 ```bash
-./ft_turing machines/utm_unary_add.json "A111+11="
+./ft_turing machines/utm_unary_add.json \
+"A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111+11="
 ```
-*Expected:* `Simulation halted: Machine blocked in state 'read_state' reading character '1'.`
+
+Expected: tape ends with `11111`.
+
+---
+
+#### Test 7.2 — 1 + 1
+
+```bash
+./ft_turing machines/utm_unary_add.json \
+"A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#1+1="
+```
+
+Expected: tape ends with `11`.
+
+---
+
+#### Test 7.3 — 0 + 5
+
+```bash
+./ft_turing machines/utm_unary_add.json \
+"A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#+11111="
+```
+
+Expected: tape ends with `11111`.
+
+---
+
+#### Test 7.4 — 10 + 10
+
+```bash
+./ft_turing machines/utm_unary_add.json \
+"A111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#1111111111+1111111111="
+```
+
+Expected: tape ends with twenty `1` symbols.
+
+---
+
+#### Test 7.5 — Start from state B
+
+```bash
+./ft_turing machines/utm_unary_add.json \
+"B111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111+11="
+```
+
+Expected: simulation starts from encoded state `B`.
+
+---
+
+#### Test 7.6 — Immediate halt
+
+```bash
+./ft_turing machines/utm_unary_add.json \
+"H111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111+11="
+```
+
+Expected: machine halts immediately.
+
+---
+
+#### Test 7.7 — Invalid initial state
+
+```bash
+./ft_turing machines/utm_unary_add.json \
+"Z111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111+11="
+```
+
+Expected:
+
+```
+Simulation halted: Machine blocked in state 'read_state' reading character 'Z'.
+```
 
 ---
 
