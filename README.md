@@ -401,10 +401,25 @@ Expected: tape ends with twenty `1` symbols.
 
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"B111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111+11="
+"B111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#111="
 ```
 
-Expected: simulation starts from encoded state `B`.
+Expected:
+
+The machine starts directly in the encoded state `B`, scans all unary digits, reaches `=`, switches to state `C`, erases the last unary digit and halts.
+
+Final tape:
+
+```
+11
+```
+```bash
+./ft_turing machines/utm_unary_add.json \
+"B111A111R;A+B11R;B111B111R;B=CbL;C111HbR;#1="
+```
+```bash
+(empty tape)
+```
 
 ---
 
