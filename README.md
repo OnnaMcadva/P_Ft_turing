@@ -328,7 +328,9 @@ The `machines/` directory contains 7 pre-configured Turing Machines:
 
 ---
 
-### Test 7.1 — Start unary addition from state A (3+2)
+### 7. utm
+
+* **Test 7.1 — Start unary addition from state A (3+2)**
 ```bash
 ./ft_turing machines/utm_unary_add.json \
 "A#111+11="
@@ -339,7 +341,7 @@ Expected:
 ```
 ---
 
-### Test 7.2 — Start unary addition from state A (1+1)
+* **Test 7.2 — Start unary addition from state A (1+1)**
 ```bash
 ./ft_turing machines/utm_unary_add.json \
 "A#1+1="
@@ -350,7 +352,7 @@ Expected:
 ```
 ---
 
-### Test 7.3 — Start unary addition from state A (0+5)
+* **Test 7.3 — Start unary addition from state A (0+5)**
 ```bash
 ./ft_turing machines/utm_unary_add.json \
 "A#+11111="
@@ -361,7 +363,7 @@ Expected:
 ```
 ---
 
-### Test 7.4 — Larger input
+* **Test 7.4 — Larger input**
 
 ```bash
 ./ft_turing machines/utm_unary_add.json \
@@ -372,7 +374,7 @@ Expected:
 11111111111111111111
 ```
 ---
-### Test 7.5 — Start directly from B
+* **Test 7.5 — Start directly from B**
 
 ```bash
 ./ft_turing machines/utm_unary_add.json \
@@ -385,7 +387,7 @@ Expected:
 
 ---
 
-### Test 7.6 — Invalid state
+* **Test 7.6 — Invalid state**
 ```bash
 ./ft_turing machines/utm_unary_add.json \
 "Z#111+11="
@@ -398,7 +400,7 @@ Machine blocked in state 'read_state' reading character 'Z'
 
 ---
 
-### Test 7.7 — Missing separator
+* **Test 7.7 — Missing separator**
 
 ```bash
 ./ft_turing machines/utm_unary_add.json \
