@@ -39,6 +39,9 @@ TEST_CASES = [
     ("Palindrome_x: 'ab' (No)", "machines/palindrome_x.json", "ab", False),
     ("Palindrome_x: '' (Empty - Yes)", "machines/palindrome_x.json", "", False),
     ("Palindrome_x Error: Invalid character", "machines/palindrome_x.json", "abc", True),
+    # regression: outer chars match but inner chars don't -> must NOT be a false positive
+    ("Palindrome_x: 'aaba' (outer matches, inner doesn't - No)", "machines/palindrome_x.json", "aaba", False),
+    ("Palindrome_x: 'abaab' (outer matches, inner doesn't - No)", "machines/palindrome_x.json", "abaab", False),
 
     # --- 5. 0n1n LANGUAGE ---
     ("0n1n: '000111' (Balanced - Yes)", "machines/0n1n.json", "000111", False),
@@ -58,14 +61,20 @@ TEST_CASES = [
     ("0^2n: '' (Empty - Yes)", "machines/02n.json", "", False),
     ("0^2n Error: Invalid character", "machines/02n.json", "0010", True),
 
-    # --- 7. UNIVERSAL TURING MACHINE (simulates unary_add) ---
-    ("UTM: 3 + 2 = 5", "machines/utm_unary_add.json", "A#111+11=", False),
-    ("UTM: 0 + 2 = 2", "machines/utm_unary_add.json", "A#+11=", False),
-    ("UTM: = 4", "machines/utm_unary_add.json", "B#11111=", False),
-    ("UTM: Two steps -> HALT", "machines/utm_unary_add.json", "H#+11111=", False),
-    ("UTM: Start from state B", "machines/utm_unary_add.json", "B#111+11=", True),
-    ("UTM Error: Invalid state (blocked)", "machines/utm_unary_add.json", "Z#111+11=", True),
-    ("UTM: 3 + 2 = 5", "machines/utm_unary_add.json", "A;A11RA;A+1RB;B11RB;B=bLC;C1bRH#111+11=", False),
+    # --- 7. UNIVERSAL TURING MACHINE (table-driven: genuinely reads/executes the
+    #        encoded transition table from the tape, does not hardcode unary_add's
+    #        logic). Table format: 5 quintuples "KEY+EFFECT" back to back:
+    #          P=(A,'1') Q=(A,'+') S=(B,'1') T=(B,'=') U=(C,'1')
+    #          V=write 1,R,->A   W=write 1,R,->B   X=write .,L,->C   Y=write .,R,->HALT
+    #        i.e. table = "PVQWSWTXUY" faithfully encodes unary_add.json's own rules.
+    ("UTM: 3 + 2 = 5", "machines/utm_unary_add.json", "APVQWSWTXUY#111+11=", False),
+    ("UTM: 0 + 2 = 2", "machines/utm_unary_add.json", "APVQWSWTXUY#+11=", False),
+    ("UTM: = 4", "machines/utm_unary_add.json", "BPVQWSWTXUY#11111=", False),
+    ("UTM: Two steps -> HALT", "machines/utm_unary_add.json", "HPVQWSWTXUY#+11111=", False),
+    ("UTM: Start from state B", "machines/utm_unary_add.json", "BPVQWSWTXUY#111+11=", True),
+    ("UTM Error: Invalid state (blocked)", "machines/utm_unary_add.json", "ZPVQWSWTXUY#111+11=", True),
+    ("UTM: table order shuffled still works (proves content-based search)", "machines/utm_unary_add.json", "AUYTXSWQWPV#111+11=", False),
+    ("UTM: corrupted table changes behavior (proves table is actually read)", "machines/utm_unary_add.json", "APXQWSWTXUY#111+11=", True),
 
     # --- 8. ROBUSTNESS & CLI ---
     ("CLI Error: Missing JSON file", "machines/does_not_exist.json", "111", True),

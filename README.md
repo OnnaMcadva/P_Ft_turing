@@ -330,55 +330,65 @@ The `machines/` directory contains 7 pre-configured Turing Machines:
 
 ### 7. utm
 
+`utm_unary_add.json` is genuinely table-driven: it does not hardcode unary
+addition's logic in its own states. Instead the tape carries the *encoded
+transition table* of `unary_add.json`, and the UTM searches that table by
+content on every simulated step. Edit the table and the simulated behaviour
+changes — nothing about the write/move/next-state is fixed in the UTM's own
+code.
+
+Tape layout: `<start-state><table>#<input-for-the-simulated-machine>`
+
+- `<start-state>` is one of `A` (`scanright1`), `B` (`scanright2`), `C`
+  (`eraselast`) or `H` (`HALT`, halts immediately).
+- `<table>` is 5 back-to-back 2-character quintuples `KEY+EFFECT`:
+  - keys: `P`=(A,'1') `Q`=(A,'+') `S`=(B,'1') `T`=(B,'=') `U`=(C,'1')
+  - effects: `V`=write 1,RIGHT,→A  `W`=write 1,RIGHT,→B  `X`=write .,LEFT,→C  `Y`=write .,RIGHT,→HALT
+  - so `PVQWSWTXUY` is exactly `unary_add.json`'s own rule set, encoded.
+
 * **Test 7.1 — Start unary addition from state A (3+2)**
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"A#111+11="
+"APVQWSWTXUY#111+11="
 ```
-Expected:
-```
-11111
-```
+Expected: tape's working section ends up `11111` (same result as running
+`unary_add.json` directly on `"111+11="`).
+
 ---
 
 * **Test 7.2 — Start unary addition from state A (1+1)**
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"A#1+1="
+"APVQWSWTXUY#1+1="
 ```
-Expected:
-```
-11
-```
+Expected: `11`
+
 ---
 
 * **Test 7.3 — Start unary addition from state A (0+5)**
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"A#+11111="
+"APVQWSWTXUY#+11111="
 ```
-Expected:
-```
-11111
-```
+Expected: `11111`
+
 ---
 
-* **Test 7.4 — Larger input**
+* **Test 7.4 — Table order shuffled (proves the search is content-based, not position-based)**
 
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"A#1111111111+1111111111="
+"AUYTXSWQWPV#111+11="
 ```
-Expected:
-```
-11111111111111111111
-```
+Expected: same result as 7.1 — `11111` — even though the quintuples are in a
+different order on the tape.
+
 ---
 * **Test 7.5 — Start directly from B**
 
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"B#111="
+"BPVQWSWTXUY#111="
 ```
 Expected:
 ```
@@ -390,13 +400,10 @@ Expected:
 * **Test 7.6 — Invalid state**
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"Z#111+11="
+"ZPVQWSWTXUY#111+11="
 ```
-Expected:
-
-```
-Machine blocked in state 'read_state' reading character 'Z'
-```
+Expected: rejected — `Z` isn't part of the machine's alphabet, so input
+validation reports it before simulation even starts.
 
 ---
 
@@ -404,14 +411,25 @@ Machine blocked in state 'read_state' reading character 'Z'
 
 ```bash
 ./ft_turing machines/utm_unary_add.json \
-"A111+11="
+"APVQWSWTXUY111+11="
 ```
 
-Expected:
+Expected: blocked — without `#` the machine keeps scanning right looking
+for the table/input boundary and never finds it, so it reports "Machine
+blocked in state 'skip_to_hash_A' ...".
 
+---
+
+* **Test 7.8 — Corrupted table (proves the table is actually read, not decorative)**
+
+```bash
+./ft_turing machines/utm_unary_add.json \
+"APXQWSWTXUY#111+11="
 ```
-Machine blocked in state 'read_state'
-```
+Expected: blocked. Changing rule `P`'s effect from `V` to `X` (write '.',
+move LEFT, go to C) makes the very first simulated step behave differently
+and the run no longer completes the same way — direct proof the UTM's
+output depends on what's written in the table, not on baked-in logic.
 
 ---
 
